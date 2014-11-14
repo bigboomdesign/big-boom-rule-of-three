@@ -1,0 +1,26 @@
+//Core partials
+@import "variables";
+@import "mixins";
+
+// plugins
+@import "compass";
+@import "breakpoint";
+@import "susy";
+$susy: (
+  //columns: 12,
+  //container: 60em,
+  //gutters: 1/4,
+  gutter-position: after
+);
+
+#ro3-container{
+	padding-top: 1em;
+	img{ max-width: 100%; height: auto; }
+
+	@include container(100%);
+	.ro3-block{ 
+		@include breakpoint($med) { @include span(1 of 3); }
+		&:last-child{ margin-right: 0; }
+	}
+	@include clearfix;
+}

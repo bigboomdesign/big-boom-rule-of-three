@@ -1,0 +1,32 @@
+/* line 16, ../../../components/sass/comp.scss */
+#ro3-container {
+  padding-top: 1em;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 18, ../../../components/sass/comp.scss */
+#ro3-container img {
+  max-width: 100%;
+  height: auto;
+}
+/* line 12, ../../../../../../../.rbenv/versions/2.1.4/lib/ruby/gems/2.1.0/gems/susy-2.1.3/sass/susy/output/support/_clearfix.scss */
+#ro3-container:after {
+  content: " ";
+  display: block;
+  clear: both;
+}
+@media (min-width: 450px) {
+  /* line 21, ../../../components/sass/comp.scss */
+  #ro3-container .ro3-block {
+    width: 28.57143%;
+    float: left;
+    margin-right: 7.14286%;
+  }
+}
+/* line 23, ../../../components/sass/comp.scss */
+#ro3-container .ro3-block:last-child {
+  margin-right: 0;
+}

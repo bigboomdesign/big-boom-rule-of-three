@@ -1,0 +1,12 @@
+/* line 2, ../../../components/sass/admin_comp.scss */
+body.settings_page_ro3_settings form h3 {
+  padding-top: 3em;
+  border-top: solid black 1px;
+  max-width: 75%;
+}
+/* line 7, ../../../components/sass/admin_comp.scss */
+body.settings_page_ro3_settings .ro3-thumb-preview img {
+  max-width: 150px;
+  height: auto;
+  margin-top: 1em;
+}
