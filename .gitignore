@@ -4,4 +4,5 @@ node_modules
 .sass-cache
 builds/**/images/*
 builds/production
+builds/*.zip
 .ruby-version
