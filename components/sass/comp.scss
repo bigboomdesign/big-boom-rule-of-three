@@ -24,3 +24,27 @@ $susy: (
 	}
 	@include clearfix;
 }
+.shadow-container{ position: relative; z-index: 1; }
+.drop-shadow{
+  position: relative;
+  display: block;
+  
+  &:before, &:after{
+	z-index: -1;
+	position: absolute;
+	content: " ";
+	display: block;
+	bottom: 22px;
+	left: 10px;
+	width: 50%;
+	top: 80%;
+	max-width:300px;
+	@include box-shadow(0 15px 10px #333);
+	@include rotate(-4deg);
+  }
+  &:after{
+  	@include rotate(4deg);
+	right: 10px;
+	left: auto;
+  }
+}

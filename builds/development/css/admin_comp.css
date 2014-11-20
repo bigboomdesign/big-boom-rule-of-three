@@ -10,3 +10,7 @@ body.settings_page_ro3_settings .ro3-thumb-preview img {
   height: auto;
   margin-top: 1em;
 }
+/* line 12, ../../../components/sass/admin_comp.scss */
+body.settings_page_ro3_settings label.radio {
+  margin-right: 1em;
+}

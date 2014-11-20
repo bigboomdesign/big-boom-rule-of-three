@@ -18,13 +18,13 @@ class RO3{
 			# make sure we have a title set before starting the block
 			$titlename = 'title'.$i;
 			if($title = $$titlename){
-				$s .= "<div class='ro3-block {$i}'>";
+				$s .= "<div class='ro3-block {$i} " . (($style=='drop-shadow') ? "shadow-container" : "") . "'>";
 					# image
 					$imgname = 'image'.$i;
 					if($image = $$imgname){
 						# if link exists, wrap it around the image
 						$linkname = 'link'.$i;
-						if($link = $$linkname) $s .= "<a class='ro3-link' href='{$link}'>";
+						if($link = $$linkname) $s .= "<a class='ro3-link " . (($style == "none") ? "" : $style ) . "' href='{$link}'>";
 							$s .= "<img src='{$image}' />";
 						if($link) $s .= "</a>";
 					}
@@ -37,7 +37,7 @@ class RO3{
 				$s .= "</div>"; # .ro3-block
 			}
 		}
-		$s .= "</div>";
+		$s .= "</div>"; // #ro3-container
 		return $s;	
 	}
 	# require a file, checking first if it exists

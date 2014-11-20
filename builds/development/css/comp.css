@@ -30,3 +30,43 @@
 #ro3-container .ro3-block:last-child {
   margin-right: 0;
 }
+
+/* line 27, ../../../components/sass/comp.scss */
+.shadow-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* line 28, ../../../components/sass/comp.scss */
+.drop-shadow {
+  position: relative;
+  display: block;
+}
+/* line 32, ../../../components/sass/comp.scss */
+.drop-shadow:before, .drop-shadow:after {
+  z-index: -1;
+  position: absolute;
+  content: " ";
+  display: block;
+  bottom: 22px;
+  left: 10px;
+  width: 50%;
+  top: 80%;
+  max-width: 300px;
+  -moz-box-shadow: 0 15px 10px #333;
+  -webkit-box-shadow: 0 15px 10px #333;
+  box-shadow: 0 15px 10px #333;
+  -moz-transform: rotate(-4deg);
+  -ms-transform: rotate(-4deg);
+  -webkit-transform: rotate(-4deg);
+  transform: rotate(-4deg);
+}
+/* line 45, ../../../components/sass/comp.scss */
+.drop-shadow:after {
+  -moz-transform: rotate(4deg);
+  -ms-transform: rotate(4deg);
+  -webkit-transform: rotate(4deg);
+  transform: rotate(4deg);
+  right: 10px;
+  left: auto;
+}

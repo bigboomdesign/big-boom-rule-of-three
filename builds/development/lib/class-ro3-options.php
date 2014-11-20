@@ -19,6 +19,9 @@ class RO3_Options{
 			case "single-image":
 				self::image_field($setting);
 			break;
+			case "radio":
+				self::radio_field($setting);
+			break;
 			default: self::text_field($setting);
 		}
 	}
@@ -33,6 +36,14 @@ class RO3_Options{
 		extract($setting);
 		?><textarea id="<?php echo $name; ?>" name="ro3_options[<?php echo $name; ?>]" cols='40' rows='7'><?php echo self::$options[$name]; ?></textarea>
 		<?php
+	}
+	# Radio Button field
+	static function radio_field($setting){
+		extract($setting);
+		foreach($choices as $choice){
+			?><label class='radio' for="<?php echo $name.'-'.$choice['value']; ?>"><input type="radio" id="<?php echo $name.'-'.$choice['value']; ?>" name="ro3_options[<?php echo $name; ?>]" value="<?php echo $choice['value']; ?>" <?php checked($choice['value'], self::$options[$name]); ?>/><?php echo $choice['label']; ?></label>
+			<?php
+		}
 	}
 	# Image field
 	static function image_field($setting){
@@ -85,6 +96,8 @@ class RO3_Options{
 }
 # Initialize static variables
 ## generate all settings for backend
+
+### settings that will come in 3's (one for each block)
 $n = 3;
 $options = array(
 	array('name' => 'image', 'type' => 'single-image', 'label' => 'Image'),
@@ -101,5 +114,13 @@ for($i = 1; $i <= $n; $i++){
 		ro3_options::$settings[] = $option;
 	}
 }
+### other settings
+ro3_options::$settings[] = array(
+	'name'=>'style', 'type'=>'radio', 'label' => 'Style', 'section' => 'main',
+	'choices' => array(
+		array('value'=>'none', 'label'=>'None'),
+		array('value' => 'drop-shadow', 'label' => 'Drop Shadow')
+	)
+);
 ## get saved options
 ro3_options::$options = get_option('ro3_options');
