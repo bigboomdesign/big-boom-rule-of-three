@@ -34,12 +34,13 @@ $susy: (
 	position: absolute;
 	content: " ";
 	display: block;
-	bottom: 22px;
+	bottom: 1em;
 	left: 10px;
-	width: 50%;
-	top: 80%;
+	width: 60%;
+	min-height: 1em;
+	//top: 80%;
 	max-width:300px;
-	@include box-shadow(0 15px 10px #333);
+	@include box-shadow(0 1em 0.66em #333);
 	@include rotate(-4deg);
   }
   &:after{

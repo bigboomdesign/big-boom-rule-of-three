@@ -48,20 +48,20 @@
   position: absolute;
   content: " ";
   display: block;
-  bottom: 22px;
+  bottom: 1em;
   left: 10px;
-  width: 50%;
-  top: 80%;
+  width: 60%;
+  min-height: 1em;
   max-width: 300px;
-  -moz-box-shadow: 0 15px 10px #333;
-  -webkit-box-shadow: 0 15px 10px #333;
-  box-shadow: 0 15px 10px #333;
+  -moz-box-shadow: 0 1em 0.66em #333;
+  -webkit-box-shadow: 0 1em 0.66em #333;
+  box-shadow: 0 1em 0.66em #333;
   -moz-transform: rotate(-4deg);
   -ms-transform: rotate(-4deg);
   -webkit-transform: rotate(-4deg);
   transform: rotate(-4deg);
 }
-/* line 45, ../../../components/sass/comp.scss */
+/* line 46, ../../../components/sass/comp.scss */
 .drop-shadow:after {
   -moz-transform: rotate(4deg);
   -ms-transform: rotate(4deg);
