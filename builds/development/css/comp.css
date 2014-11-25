@@ -4,6 +4,7 @@
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;
+  overflow: visible !important;
   overflow: hidden;
   *zoom: 1;
 }
@@ -19,30 +20,30 @@
   clear: both;
 }
 @media (min-width: 450px) {
-  /* line 21, ../../../components/sass/comp.scss */
+  /* line 22, ../../../components/sass/comp.scss */
   #ro3-container .ro3-block {
     width: 28.57143%;
     float: left;
     margin-right: 7.14286%;
   }
 }
-/* line 23, ../../../components/sass/comp.scss */
+/* line 24, ../../../components/sass/comp.scss */
 #ro3-container .ro3-block:last-child {
   margin-right: 0;
 }
 
-/* line 27, ../../../components/sass/comp.scss */
+/* line 29, ../../../components/sass/comp.scss */
 .shadow-container {
   position: relative;
   z-index: 1;
 }
 
-/* line 28, ../../../components/sass/comp.scss */
+/* line 30, ../../../components/sass/comp.scss */
 .drop-shadow {
   position: relative;
   display: block;
 }
-/* line 32, ../../../components/sass/comp.scss */
+/* line 34, ../../../components/sass/comp.scss */
 .drop-shadow:before, .drop-shadow:after {
   z-index: -1;
   position: absolute;
@@ -61,7 +62,7 @@
   -webkit-transform: rotate(-4deg);
   transform: rotate(-4deg);
 }
-/* line 46, ../../../components/sass/comp.scss */
+/* line 48, ../../../components/sass/comp.scss */
 .drop-shadow:after {
   -moz-transform: rotate(4deg);
   -ms-transform: rotate(4deg);
@@ -69,4 +70,14 @@
   transform: rotate(4deg);
   right: 10px;
   left: auto;
+}
+
+/* line 56, ../../../components/sass/comp.scss */
+a.circle {
+  display: block;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.6);
+  max-width: 300px;
+  text-align: center;
 }

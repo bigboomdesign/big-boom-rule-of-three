@@ -18,12 +18,14 @@ $susy: (
 	img{ max-width: 100%; height: auto; }
 
 	@include container(100%);
+	overflow: visible !important;
 	.ro3-block{ 
 		@include breakpoint($med) { @include span(1 of 3); }
 		&:last-child{ margin-right: 0; }
 	}
 	@include clearfix;
 }
+// css dropshadow
 .shadow-container{ position: relative; z-index: 1; }
 .drop-shadow{
   position: relative;
@@ -48,4 +50,14 @@ $susy: (
 	right: 10px;
 	left: auto;
   }
+}
+// circle with shadow, using background image
+// note images inside a.circle are forced through JS to be square
+a.circle{
+	display: block;
+	overflow: hidden;
+	border-radius: 50%;
+	box-shadow: 0 0 3px 2px rgba(0,0,0,0.6);
+	max-width: 300px;
+	text-align: center;
 }

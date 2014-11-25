@@ -25,7 +25,7 @@ class RO3{
 						# if link exists, wrap it around the image
 						$linkname = 'link'.$i;
 						if($link = $$linkname) $s .= "<a class='ro3-link " . (($style == "none") ? "" : $style ) . "' href='{$link}'>";
-							$s .= "<img src='{$image}' />";
+							$s .= "<img src='{$image}'/>";
 						if($link) $s .= "</a>";
 					}
 					# header (with link if it's set)

@@ -119,7 +119,8 @@ ro3_options::$settings[] = array(
 	'name'=>'style', 'type'=>'radio', 'label' => 'Style', 'section' => 'main',
 	'choices' => array(
 		array('value'=>'none', 'label'=>'None'),
-		array('value' => 'drop-shadow', 'label' => 'Drop Shadow')
+		array('value' => 'drop-shadow', 'label' => 'Drop Shadow'),
+		array('value' => 'circle', 'label' => 'Circle')
 	)
 );
 ## get saved options

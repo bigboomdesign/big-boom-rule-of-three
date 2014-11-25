@@ -55,7 +55,8 @@ if(ro3_should_load()) do{
 		# scripts and styles
 		add_action('wp_enqueue_scripts', 'ro3_enqueue_scripts');
 		function ro3_enqueue_scripts(){
-			wp_enqueue_style('ro3-css', ro3_url('css/comp.css'));
+			wp_enqueue_style('ro3-css', ro3_url('/css/comp.css'));
+			wp_enqueue_script('ro3-js', ro3_url('/js/rule-of-three.js'), array('jquery'));
 		}
 		# Main container shortcode
 		function ro3_container($atts, $content = ""){ return RO3::do_container(); }
