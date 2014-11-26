@@ -1,14 +1,14 @@
 jQuery(document).ready(function($){
 	// square dimensions on circle images on page load and window resize
-	circleShadows($);
+	squareImages($);
 	$(window).resize(function(){
-		circleShadows($);
+		squareImages($);
 	});
 });
-function circleShadows($){
+function squareImages($){
 	// loop through <a> containers for circle images
-	var circles = $("a.circle");
-	circles.each(function(){
+	var containers = $("a.circle, a.nested");
+	containers.each(function(){
 		var width = $(this).css("width");
 		// set dimensions of <a> to square
 		$(this).css("height", width);	

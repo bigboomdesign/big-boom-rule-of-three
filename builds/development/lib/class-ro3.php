@@ -18,7 +18,10 @@ class RO3{
 			# make sure we have a title set before starting the block
 			$titlename = 'title'.$i;
 			if($title = $$titlename){
-				$s .= "<div class='ro3-block {$i} " . (($style=='drop-shadow') ? "shadow-container" : "") . "'>";
+				$s .= "<div class='ro3-block {$i} " 
+					. ( $style == 'drop-shadow' ? "shadow-container " : '')
+					. ( $style == 'nested' ? 'nested-container' : '')
+					. "'>";
 					# image
 					$imgname = 'image'.$i;
 					if($image = $$imgname){
@@ -29,11 +32,13 @@ class RO3{
 						if($link) $s .= "</a>";
 					}
 					# header (with link if it's set)
+					$s .= "<div class='ro3-description'>";
 					$s .= "<h2>" . ( $link ? "<a href='{$link}'>" : "" ) .$title . ($link ? "</a>" : "") . "</h2>";
 					# description
 					$descname = 'description'.$i;
 					if($description = $$descname)
 						$s .= "<p>$description</p>";
+					$s .= "</div>"; # .ro3-description
 				$s .= "</div>"; # .ro3-block
 			}
 		}

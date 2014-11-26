@@ -26,7 +26,7 @@ $susy: (
 	@include clearfix;
 }
 // css dropshadow
-.shadow-container{ position: relative; z-index: 1; }
+.shadow-container, .nested-container{ position: relative; z-index: 1; }
 .drop-shadow{
   position: relative;
   display: block;
@@ -51,13 +51,42 @@ $susy: (
 	left: auto;
   }
 }
-// circle with shadow, using background image
+// circle with shadow
 // note images inside a.circle are forced through JS to be square
 a.circle{
 	display: block;
 	overflow: hidden;
 	border-radius: 50%;
-	box-shadow: 0 0 3px 2px rgba(0,0,0,0.6);
-	max-width: 300px;
-	text-align: center;
+	box-shadow: 0 0 3px 1px rgba(0,0,0,0.6);
+}
+// nested 
+.ro3-block.nested-container{
+	position: relative;
+	&:before{
+		z-index: -1;
+		position: absolute;
+		content: " ";
+		display: block;
+		bottom: 1em;
+		left: 10px;
+		width: 60%;
+		min-height: 1em;
+		@include box-shadow(0 1em 0.66em #333);
+		@include rotate(-4deg);
+	}
+	a.nested{ 
+		display: block;
+		border-radius: 0.5em;
+		overflow: hidden;
+		box-shadow: 0 0 3px 1px rgba(0,0,0,0.6);
+	}
+	h2{ font-size: 1.1em; }
+	p{ font-size: 0.8em; }
+	.ro3-description{
+		position: absolute;
+		bottom: 0;
+		background: rgba(255,255,255,0.6);
+		padding: 0.5em;
+		border-radius: 0 0 0.5em 0.5em;
+	}
 }

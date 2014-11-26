@@ -120,6 +120,7 @@ ro3_options::$settings[] = array(
 	'choices' => array(
 		array('value'=>'none', 'label'=>'None'),
 		array('value' => 'drop-shadow', 'label' => 'Drop Shadow'),
+		array('value' => 'nested', 'label' => 'Nested'),
 		array('value' => 'circle', 'label' => 'Circle')
 	)
 );
