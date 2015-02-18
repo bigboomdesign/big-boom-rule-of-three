@@ -19,10 +19,11 @@ if(ro3_should_load()) do{
 		function ro3_admin_scripts(){
 			# make sure we only load our scripts on the ro3_settings page
 			$screen = get_current_screen();
-			if($screen->id == "settings_page_ro3_settings"){
+			if($screen->id == "toplevel_page_ro3_settings"){
 				# js
 				wp_enqueue_media();	
 				wp_enqueue_script("media-single-js", ro3_url('js/media-single.js'), array('media-views', 'jquery'));
+				wp_enqueue_script("ro3-settings-js", ro3_url('js/ro3-settings.js'), array('jquery'));
 				# css
 				wp_enqueue_style('ro3-admin-css', ro3_url('css/admin_comp.css'));
 			}
@@ -45,7 +46,7 @@ if(ro3_should_load()) do{
 		## plugin options page
 		add_action('admin_menu', 'ro3_settings_page');
 		function ro3_settings_page() {
-			add_options_page('Rule of Three Settings', 'Rule of Three', 'manage_options', 'ro3_settings', 'ro3_do_settings_page');
+			add_menu_page('Rule of Three Settings', 'Rule of Three', 'manage_options', 'ro3_settings', 'ro3_do_settings_page');
 		}
 		function ro3_do_settings_page(){ RO3_Options::settings_page(); }
 	} #end: admin routines

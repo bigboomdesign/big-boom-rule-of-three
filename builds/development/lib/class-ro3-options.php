@@ -11,6 +11,7 @@ class RO3_Options{
 	
 	# Display field input
 	static function do_settings_field($setting){
+		extract(RO3_Options::$options);
 		# call one of several functions based on what type of field we have
 		switch($setting['type']){
 			case "textarea":
@@ -23,6 +24,32 @@ class RO3_Options{
 				self::radio_field($setting);
 			break;
 			default: self::text_field($setting);
+		}
+		# preview for different RO3 styles
+		if($setting['name'] == 'style'){
+		?>
+			<div id="ro3-preview">		
+			<?php
+				foreach($setting['choices'] as $a){
+					$choice = $a['value'];
+				?>
+				<div 
+					id="preview-<?php echo $choice; ?>"
+					style="display: <?php echo ($style==$choice)?'block':'none'; ?>"
+				>
+					<?php if('nested' == $choice){
+					?>
+						<p><em>Note: this choice works best with a short description</em></p>
+					<?php
+					}
+					?>
+					<img src="<?php echo ro3_url('/images/'. $choice .'.jpg'); ?>" />
+				</div>			
+				<?php
+				}
+				?>
+			</div>
+		<?php
 		}
 	}
 	# Text field

@@ -112,16 +112,22 @@ a.circle {
 /* line 83, ../../../components/sass/comp.scss */
 .ro3-block.nested-container h2 {
   font-size: 1.1em;
+  margin: 0;
+  padding: 0.5em 0;
 }
-/* line 84, ../../../components/sass/comp.scss */
+/* line 87, ../../../components/sass/comp.scss */
 .ro3-block.nested-container p {
   font-size: 0.8em;
+  padding: 0.5em 0;
+  margin: 0;
 }
-/* line 85, ../../../components/sass/comp.scss */
+/* line 92, ../../../components/sass/comp.scss */
 .ro3-block.nested-container .ro3-description {
+  min-width: 100%;
   position: absolute;
   bottom: 0;
   background: rgba(255, 255, 255, 0.6);
   padding: 0.5em;
   border-radius: 0 0 0.5em 0.5em;
+  box-sizing: border-box;
 }

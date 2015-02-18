@@ -1,8 +1,15 @@
-body.settings_page_ro3_settings{
+body.toplevel_page_ro3_settings{
 	form h3{ 
 		padding-top: 3em; 
 		border-top: solid black 1px; 
 		max-width: 75%;
+	}
+	#ro3-preview{
+		margin-top: 1em;
+		img{
+			max-height: 250px;
+			width: auto;
+		}
 	}
 	.ro3-thumb-preview img{
 		max-width: 150px;

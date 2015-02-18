@@ -1,16 +1,25 @@
 /* line 2, ../../../components/sass/admin_comp.scss */
-body.settings_page_ro3_settings form h3 {
+body.toplevel_page_ro3_settings form h3 {
   padding-top: 3em;
   border-top: solid black 1px;
   max-width: 75%;
 }
 /* line 7, ../../../components/sass/admin_comp.scss */
-body.settings_page_ro3_settings .ro3-thumb-preview img {
+body.toplevel_page_ro3_settings #ro3-preview {
+  margin-top: 1em;
+}
+/* line 9, ../../../components/sass/admin_comp.scss */
+body.toplevel_page_ro3_settings #ro3-preview img {
+  max-height: 250px;
+  width: auto;
+}
+/* line 14, ../../../components/sass/admin_comp.scss */
+body.toplevel_page_ro3_settings .ro3-thumb-preview img {
   max-width: 150px;
   height: auto;
   margin-top: 1em;
 }
-/* line 12, ../../../components/sass/admin_comp.scss */
-body.settings_page_ro3_settings label.radio {
+/* line 19, ../../../components/sass/admin_comp.scss */
+body.toplevel_page_ro3_settings label.radio {
   margin-right: 1em;
 }
