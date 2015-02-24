@@ -11,12 +11,12 @@ jQuery(document).ready(function($){
 	
 	// onclick for post type radio buttons
 	$('input.ro3-post-type-select').on('click', function(){
-		// make sure we got a valid selection
-		bValid = true;
 		// get post type clicked on
 		var sType = $(this).val();
 		// get section
 		var nSection = $(this).attr('data-section');
+		if('' == sType || '' == nSection) return;
+		// ajax call to get posts and generate dropdown
 		$.post(
 			ajaxurl,
 			{
@@ -30,9 +30,18 @@ jQuery(document).ready(function($){
 				.html(data);
 			}
 		);
-		
-		// uncheck if we didn't get a post
-		if(!bValid) $(this).prop('checked', false);
+	});
+	// onclick for 'clear' radio buttons
+	$(document).on('click', 'a.clear-post-type-select', function(){
+		var nSection = $(this).attr('data-section');
+		if ('' == nSection) return;
+		var radios = $('input.ro3-post-type-select[name*=post_type' + nSection + ']');
+		radios.each(function(){
+			$(this).prop('checked', false);
+			$('div#post-select-'+nSection)
+				.css('display', 'none')
+				.find('select').attr('value', '');
+		});
 	});
 	
 	// onclick for post select dropdown
@@ -56,13 +65,21 @@ jQuery(document).ready(function($){
 					$('input#title'+nSection).attr('value', post.post_title);
 				}
 				// thumbnail
+				var imageInput = $('input#image'+nSection);
+				var imageMsg = imageInput.closest('td').find('p.ro3-fail');
 				if('' != post.thumb){
-					$('input#image'+nSection).attr('value', post.thumb);
-					$('div#image'+nSection+'-thumb-preview img').attr('src', post.thumb);					
+					imageInput.attr('value', post.thumb);
+					$('div#image'+nSection+'-thumb-preview img').attr('src', post.thumb);
+					// clear the warning message
+					if(imageMsg.length > 0) imageMsg.html('');
 				}
+				// if no thumbnail exists
 				else{
-					$('input#image'+nSection).attr('value', '');					
-					$('div#image'+nSection+'-thumb-preview img').attr('src', '');					
+					imageInput.attr('value', '');
+					$('div#image'+nSection+'-thumb-preview img').attr('src', '');
+					// display a warning message
+					if(imageMsg.length == 0)
+						imageInput.closest('td').prepend('<p class="ro3-fail">This post doesn\'t have a featured image.</p>');
 				}
 				// description
 				$('textarea#description'+nSection).html(post.post_excerpt);

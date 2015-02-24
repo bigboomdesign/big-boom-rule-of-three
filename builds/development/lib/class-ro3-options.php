@@ -32,6 +32,12 @@ class RO3_Options{
 			break;
 			default: self::text_field($setting);
 		}
+		# field description
+		if(array_key_exists('description', $setting)){
+		?>
+			<p class='description'><?php echo $setting['description']; ?></p>
+		<?php
+		}
 		# preview for different RO3 styles
 		if($setting['name'] == 'style'){
 		?>
@@ -58,10 +64,16 @@ class RO3_Options{
 			</div>
 		<?php
 		}
-		# Post select area for existing content
+		# Subcontent for 'Existing Content' radio buttons
 		if(strpos($setting['name'], 'post_type') === 0){
 			# get the section number 
 			$section = $setting['section'];
+			
+			# 'Clear' link
+		?>
+			<a href="javascript:void(0)" class='clear-post-type-select' data-section="<?php echo $section; ?>">Clear</a>
+		<?php	
+			# Post select area for specific post type
 		?>
 			<div 
 				id="post-select-<?php echo $section; ?>"

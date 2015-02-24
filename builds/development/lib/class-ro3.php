@@ -26,6 +26,7 @@ class RO3{
 			array('name' => 'post_id'.$section, 'type' => 'select', 'label' => $post->post_title,
 				'data' => array('section' => $section),
 				'choices' => $choices,
+				'description' => '<b>Note:</b> Below, you have the option to alter the title, description, image, etc. for the post you choose.  Changes to the post do not auto update here.'
 			)
 		);
 		?></div>

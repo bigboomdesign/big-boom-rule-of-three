@@ -1,3 +1,8 @@
+@import "variables";
+.ro3-fail{
+	color: $red;
+}
+
 body.toplevel_page_ro3_settings{
 	form h3{ 
 		padding-top: 3em; 
