@@ -42,7 +42,7 @@ gulp.task("compass", function(){
 	gulp.src(sassSources)
 		.pipe(compass({
 			sass: panel('/sass'),
-			css: outputDir+'css',
+			css: outputDir+'/css',
 			image: outputDir+'images',
 			style: sassStyle,
 			comments: (env==="development") ? true : false,
@@ -53,7 +53,7 @@ gulp.task("compass", function(){
 		.pipe(gulp.dest(outputDir+'css'))
 });
 gulp.task("watch", function(){
-	gulp.watch(sassSources, ['compass']);
+//	gulp.watch(sassSources, ['compass']);
 	gulp.watch(jsSources, ["js"]);
 	gulp.watch(panel('/sass/*.scss'), ["compass"]);
 	gulp.watch(phpSources, ['php']);
