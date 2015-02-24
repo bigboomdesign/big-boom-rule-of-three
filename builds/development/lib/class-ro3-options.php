@@ -11,11 +11,18 @@ class RO3_Options{
 	
 	# Display field input
 	static function do_settings_field($setting){
+		$setting = RO3::get_field_array($setting);
 		extract(RO3_Options::$options);
 		# call one of several functions based on what type of field we have
 		switch($setting['type']){
 			case "textarea":
 				self::textarea_field($setting);
+			break;
+			case "checkbox":
+				self::checkbox_field($setting);
+			break;
+			case 'select':
+				self::select_field($setting);
 			break;
 			case "single-image":
 				self::image_field($setting);
@@ -51,6 +58,46 @@ class RO3_Options{
 			</div>
 		<?php
 		}
+		# Post select area for existing content
+		if(strpos($setting['name'], 'post_type') === 0){
+			# get the section number 
+			$section = $setting['section'];
+		?>
+			<div 
+				id="post-select-<?php echo $section; ?>"
+				class='post-select' 
+				style="display: <?php echo (isset(RO3_Options::$options['post_type'.$section])) ? 'block' : 'none';?>;"
+			><?php RO3::select_post_for_type(RO3_Options::$options['post_type'.$section], $section); ?>
+			</div>
+		<?php
+		}
+		# Child fields (for conditional logic)
+		if(array_key_exists('choices', $setting)){
+			$choices = RO3::get_choice_array($setting);
+			# keep track of which fields we've displayed (in case two choices have the same child)
+			$aKids = array();
+
+			# Loop through choices and display and children
+			foreach($choices as $choice){
+				if(array_key_exists('children', $choice)){
+					foreach($choice['children'] as $child_setting){
+						# add this child to the array of completed child settings
+						if(!in_array($child_setting['name'], $aKids)){
+							$aKids[] = $child_setting['name'];
+							# note the child field div is hidden unless the parent option is selected
+						?><div 
+							id="child_field_<?php echo $child_setting['name']; ?>"
+							style="display: <?php echo (RO3_Options::$options[$setting['name']] == $choice['value']) ? 'block' : 'none'?>"
+						>
+							<h4><?php echo $child_setting['label']; ?></h4>
+							<?php self::do_settings_field($child_setting); ?>
+						</div>
+						<?php
+						}
+					}
+				} # end: choice has children
+			} # end: foreach: choices
+		} # end: setting has choices		
 	}
 	# Text field
 	static function text_field($setting){
@@ -64,11 +111,95 @@ class RO3_Options{
 		?><textarea id="<?php echo $name; ?>" name="ro3_options[<?php echo $name; ?>]" cols='40' rows='7'><?php echo self::$options[$name]; ?></textarea>
 		<?php
 	}
+	# Checkbox field
+	static function checkbox_field($setting){
+		extract($setting);
+		foreach($choices as $choice){
+		?><label class='checkbox' for="<?php echo $choice['id']; ?>">
+			<input 
+				type='checkbox'
+				id="<?php echo $choice['id']; ?>"
+				name="ro3_options[<?php echo $choice['id']; ?>]"
+				value="<?php echo $choice['value']; ?>"
+				class="<?php if(array_key_exists('class', $setting)) echo $setting['class']; ?>"
+				<?php checked(true, array_key_exists($choice['id'], self::$options)); ?>						
+			/>&nbsp;<?php echo $choice['label']; ?> &nbsp; &nbsp;
+		</label>
+		<?php
+		}
+	}
+	# <select> dropdown field
+	static function select_field($setting){
+		extract($setting);
+	?><select 
+		id="<?php echo $name; ?>"
+		name="ro3_options[<?php echo $name; ?>]"
+		<?php
+			if(array_key_exists('data', $setting)){
+				foreach($setting['data'] as $k => $v){
+					echo " data-{$k}='{$v}'";
+				}
+			}
+			if($class) echo " class='".$class."'";
+		?>
+	>
+		<?php 
+			# if we are given a string for $choices (i.e. single choice)
+			if(is_string($choices)) {
+				?><option 
+					value="<?php echo RO3::clean_str_for_field($choices); ?>"
+					<?php selected(RO3_Options::$options[$name], RO3::clean_str_for_field($choice) ); ?>
+				><?php echo $choices; ?>
+				</option>
+			<?php
+			}
+			# if $choices is an array
+			elseif(is_array($choices)){
+				foreach($choices as $choice){
+					# if $choice is a string
+					if(is_string($choice)){
+						$label = $choice;
+						$value = RO3::clean_str_for_field($choice);
+					}
+					# if $choice is an array
+					elseif(is_array($choice)){
+						$label = $choice['label'];
+						$value = isset($choice['value']) ? $choice['value'] : RO3::clean_str_for_field($choice['label']);
+					}
+				?>
+					<option 
+						value="<?php echo $value; ?>"
+						<?php selected(RO3_Options::$options[$name], $value ); ?>					
+					><?php echo $label; ?></option>
+				<?php
+				} # end foreach: $choices
+			} # endif: $choices is an array
+		?>
+		
+	</select><?php
+	}
 	# Radio Button field
 	static function radio_field($setting){
 		extract($setting);
+		$choices = RO3::get_choice_array($setting);
 		foreach($choices as $choice){
-			?><label class='radio' for="<?php echo $name.'-'.$choice['value']; ?>"><input type="radio" id="<?php echo $name.'-'.$choice['value']; ?>" name="ro3_options[<?php echo $name; ?>]" value="<?php echo $choice['value']; ?>" <?php checked($choice['value'], self::$options[$name]); ?>/><?php echo $choice['label']; ?></label>
+				$label = $choice['label']; 
+				$value = $choice['value'];
+			?><label class='radio' for="<?php echo $choice['id']; ?>">
+				<input type="radio" id="<?php echo $choice['id']; ?>" 
+				name="ro3_options[<?php echo $name; ?>]" 
+				value="<?php echo $value; ?>"
+				class="<?php if(array_key_exists('class', $setting)) echo $setting['class']; ?>"
+				<?php
+				# add data attributes
+				if(array_key_exists('data', $choice)){
+					foreach($choice['data'] as $k => $v){
+						echo " data-{$k}='{$v}'";
+					}
+				}
+				# add checked property if we need to
+				checked($value, self::$options[$name]); ?>
+			/>&nbsp;<?php echo $label; ?></label>&nbsp;&nbsp;
 			<?php
 		}
 	}
@@ -127,6 +258,13 @@ class RO3_Options{
 ### settings that will come in 3's (one for each block)
 $n = 3;
 $options = array(
+	array('name' => 'post_type', 'type' => 'radio', 'label' => 'Use Existing Content',
+		'class' => 'ro3-post-type-select',
+		'choices' => array(
+			array('label' => 'Post', 'value' => 'post'),
+			array('label' => 'Page', 'value' => 'page'),
+		),
+	),
 	array('name' => 'image', 'type' => 'single-image', 'label' => 'Image'),
 	array('name' => 'title', 'type' => 'text', 'label' => 'Title'),
 	array('name' => 'description', 'type' => 'textarea', 'label' => 'Description'),
@@ -138,6 +276,11 @@ for($i = 1; $i <= $n; $i++){
 		// set the section (ro3_1, ro3_2, ro3_3) and name (title1, description1, etc )
 		$option['section'] = $i;
 		$option['name'] = $option['name'] . $i;
+		if(array_key_exists('choices', $option)){
+			foreach($option['choices'] as $k => $v){
+				$option['choices'][$k]['data'] = array('section' => $i);
+			}
+		}
 		ro3_options::$settings[] = $option;
 	}
 }

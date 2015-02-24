@@ -66,6 +66,26 @@ if(ro3_should_load()) do{
 } while(0); 
 #end main routine
 
+# AJAX
+add_action('wp_ajax_ro3_get_posts_for_type', 'ro3_get_posts_for_type');
+function ro3_get_posts_for_type(){
+	RO3::select_post_for_type($_POST['post_type'], $_POST['section']);
+	die();
+}
+add_action('wp_ajax_get_block_data_for_post', 'get_block_data_for_post');
+function get_block_data_for_post(){
+	$post = get_post($_POST['post_id']);
+	$out = array(
+		'post_title' => $post->post_title,
+		'thumb' => wp_get_attachment_url( get_post_thumbnail_id($post->ID) ),
+		'url' => get_permalink($post->ID),
+	);
+	$excerpt = $post->post_excerpt ? $post->post_excerpt : substr($post->post_content,0,250);
+	$out['post_excerpt'] = $excerpt;
+	echo json_encode($out);
+	die();
+}
+
 ###
 # Helper functions
 ###

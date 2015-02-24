@@ -14,12 +14,20 @@ body.toplevel_page_ro3_settings #ro3-preview img {
   width: auto;
 }
 /* line 14, ../../../components/sass/admin_comp.scss */
+body.toplevel_page_ro3_settings .post-select {
+  margin-top: 1em;
+}
+/* line 16, ../../../components/sass/admin_comp.scss */
+body.toplevel_page_ro3_settings .post-select label {
+  display: block;
+}
+/* line 20, ../../../components/sass/admin_comp.scss */
 body.toplevel_page_ro3_settings .ro3-thumb-preview img {
   max-width: 150px;
   height: auto;
   margin-top: 1em;
 }
-/* line 19, ../../../components/sass/admin_comp.scss */
+/* line 25, ../../../components/sass/admin_comp.scss */
 body.toplevel_page_ro3_settings label.radio {
   margin-right: 1em;
 }
