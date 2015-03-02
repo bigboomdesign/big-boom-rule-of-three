@@ -248,7 +248,24 @@ class RO3_Options{
 			add_settings_section('ro3_'.$i, 'Block ' . $i, '', 'ro3_settings');
 		}
 		# add fields
+		## get choices for custom post types
+		$pt_args = array(
+			'_builtin' => false,
+			'publicly_queryable' => false
+		);
+		$pts = get_post_types($pt_args, 'objects');
+		# loop through settings and register
 		foreach(RO3_Options::$settings as $setting){
+			# add choices for custom post types
+			foreach($pts as $pt){
+				if(strpos($setting['name'],'post_type') === 0){
+					$setting['choices'][] = array(
+						'label' => $pt->labels->name, 
+						'value' => $pt->name,
+						'data' => array('section' => $setting['section'])
+					);
+				}
+			}
 			add_settings_field($setting['name'], $setting['label'], 'ro3_settings_field_callback', 'ro3_settings', 'ro3_'.$setting['section'], $setting);
 		}	
 	}
