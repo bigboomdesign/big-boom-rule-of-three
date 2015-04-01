@@ -53,11 +53,14 @@ $susy: (
 }
 // circle with shadow
 // note images inside a.circle are forced through JS to be square
-a.circle{
-	display: block;
-	overflow: hidden;
-	border-radius: 50%;
-	box-shadow: 0 0 3px 1px rgba(0,0,0,0.6);
+div.circle-container{
+	text-align: center;
+	a.circle{
+		display: block;
+		overflow: hidden;
+		border-radius: 50%;
+		box-shadow: 0 0 3px 1px rgba(0,0,0,0.6);
+	}
 }
 // nested 
 .ro3-block.nested-container{

@@ -45,7 +45,7 @@ class RO3{
 		# number of columns we'll have
 		$n = 3;
 		# string to return
-		$s .= "<div id='ro3-container'>";
+		$s .= "<div id='ro3-container' class='" . $style . "-container'>";
 		for($i = 1; $i <= $n; $i++){
 			# make sure we have a title set before starting the block
 			$titlename = 'title'.$i;
