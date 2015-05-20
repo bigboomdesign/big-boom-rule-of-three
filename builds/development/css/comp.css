@@ -31,19 +31,30 @@
 #ro3-container .ro3-block:last-child {
   margin-right: 0;
 }
+/* line 25, ../../../components/sass/comp.scss */
+#ro3-container .ro3-block .ro3-read-more {
+  text-align: right;
+}
+/* line 32, ../../../components/sass/comp.scss */
+#ro3-container.bar-container h2 {
+  border-bottom: solid 0.8em;
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+  display: block;
+}
 
-/* line 29, ../../../components/sass/comp.scss */
+/* line 41, ../../../components/sass/comp.scss */
 .shadow-container, .nested-container {
   position: relative;
   z-index: 1;
 }
 
-/* line 30, ../../../components/sass/comp.scss */
+/* line 42, ../../../components/sass/comp.scss */
 .drop-shadow {
   position: relative;
   display: block;
 }
-/* line 34, ../../../components/sass/comp.scss */
+/* line 46, ../../../components/sass/comp.scss */
 .drop-shadow:before, .drop-shadow:after {
   z-index: -1;
   position: absolute;
@@ -62,7 +73,7 @@
   -webkit-transform: rotate(-4deg);
   transform: rotate(-4deg);
 }
-/* line 48, ../../../components/sass/comp.scss */
+/* line 60, ../../../components/sass/comp.scss */
 .drop-shadow:after {
   -moz-transform: rotate(4deg);
   -ms-transform: rotate(4deg);
@@ -72,11 +83,11 @@
   left: auto;
 }
 
-/* line 56, ../../../components/sass/comp.scss */
+/* line 68, ../../../components/sass/comp.scss */
 div.circle-container {
   text-align: center;
 }
-/* line 58, ../../../components/sass/comp.scss */
+/* line 70, ../../../components/sass/comp.scss */
 div.circle-container a.circle {
   display: block;
   overflow: hidden;
@@ -84,11 +95,11 @@ div.circle-container a.circle {
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.6);
 }
 
-/* line 66, ../../../components/sass/comp.scss */
+/* line 78, ../../../components/sass/comp.scss */
 .ro3-block.nested-container {
   position: relative;
 }
-/* line 68, ../../../components/sass/comp.scss */
+/* line 80, ../../../components/sass/comp.scss */
 .ro3-block.nested-container:before {
   z-index: -1;
   position: absolute;
@@ -106,26 +117,26 @@ div.circle-container a.circle {
   -webkit-transform: rotate(-4deg);
   transform: rotate(-4deg);
 }
-/* line 80, ../../../components/sass/comp.scss */
+/* line 92, ../../../components/sass/comp.scss */
 .ro3-block.nested-container a.nested {
   display: block;
   border-radius: 0.5em;
   overflow: hidden;
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.6);
 }
-/* line 86, ../../../components/sass/comp.scss */
+/* line 98, ../../../components/sass/comp.scss */
 .ro3-block.nested-container h2 {
   font-size: 1.1em;
   margin: 0;
   padding: 0.5em 0;
 }
-/* line 90, ../../../components/sass/comp.scss */
+/* line 102, ../../../components/sass/comp.scss */
 .ro3-block.nested-container p {
   font-size: 0.8em;
   padding: 0.5em 0;
   margin: 0;
 }
-/* line 95, ../../../components/sass/comp.scss */
+/* line 107, ../../../components/sass/comp.scss */
 .ro3-block.nested-container .ro3-description {
   min-width: 100%;
   position: absolute;

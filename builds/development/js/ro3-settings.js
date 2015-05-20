@@ -8,6 +8,8 @@ jQuery(document).ready(function($){
 		// activate the preview for selected value
 		$('#ro3-preview div#preview-' + option).css('display', 'block');
 	});
+	// color picker
+	$('.color-picker').iris();
 	
 	// onclick for post type radio buttons
 	$('input.ro3-post-type-select').on('click', function(){

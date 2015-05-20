@@ -4,9 +4,9 @@ class RO3{
 	# this object hold the options for front end views
 	static $options;
 
-	/** 
+	/*
 	* Back end
-	**/
+	*/
 	static function select_post_for_type($post_type, $section = ''){
 		$args = array(
 			'post_type' => $post_type,
@@ -33,11 +33,12 @@ class RO3{
 		<?php	
 	}
 
-	/** 
+	/*
 	* Front End
-	**/
-	# display the container on front end
-	static function do_container(){
+	*/
+	
+	# response for shortcode [rule-of-three]
+	static function container_html(){
 		extract(RO3_Options::$options);
 		# do nothing if we don't have at least 1 title set
 		if(!$title1 && !$title2 && !$title3) return;
@@ -47,40 +48,117 @@ class RO3{
 		# string to return
 		$s .= "<div id='ro3-container' class='" . $style . "-container'>";
 		for($i = 1; $i <= $n; $i++){
-			# make sure we have a title set before starting the block
-			$titlename = 'title'.$i;
-			if($title = $$titlename){
-				$s .= "<div class='ro3-block {$i} " 
-					. ( $style == 'drop-shadow' ? "shadow-container " : '')
-					. ( $style == 'nested' ? 'nested-container' : '')
-					. "'>";
-					# image
-					$imgname = 'image'.$i;
-					if($image = $$imgname){
-						# if link exists, wrap it around the image
-						$linkname = 'link'.$i;
-						if($link = $$linkname) $s .= "<a class='ro3-link " . (($style == "none") ? "" : $style ) . "' href='{$link}'>";
-							$s .= "<img src='{$image}'/>";
-						if($link) $s .= "</a>";
-					}
-					# header (with link if it's set)
-					$s .= "<div class='ro3-description'>";
-					$s .= "<h2>" . ( $link ? "<a href='{$link}'>" : "" ) .$title . ($link ? "</a>" : "") . "</h2>";
-					# description
-					$descname = 'description'.$i;
-					if($description = $$descname)
-						$s .= "<p>$description</p>";
-					$s .= "</div>"; # .ro3-description
-				$s .= "</div>"; # .ro3-block
-			}
+			$s .= self::block_html($i);
 		}
 		$s .= "</div>"; // #ro3-container
 		return $s;	
+	} # end: container_html()
+	
+	# get HTML for block $i
+	function block_html($i){
+		# the string we'll return
+		$s = '';
+		# plugin options
+		extract(RO3_Options::$options);
+		
+		# make sure we have a title set before starting the block
+		$titlename = 'title'.$i;		
+		if(!($title = $$titlename)) return $s;
+		
+		# get other settings for this block
+		## image
+		$imgname = 'image'.$i;
+		$image = isset($$imgname) ? $$imgname : '';
+
+		## link
+		$linkname = 'link'.$i;
+		$link = isset($$linkname) ? $$linkname : '';
+		
+		## description
+		$descname = 'description'.$i;
+		$description = isset($$descname) ? $$descname : '';
+		
+		# store this block's settings in an array
+		$block = array(
+			'title' => $title,
+			'image' => $image,
+			'link' => $link,
+			'description' => $description,
+		);
+		
+		# generate the HTML string
+		$s .= "<div class='ro3-block {$i} " 
+			. ( $style == 'drop-shadow' ? "shadow-container " : '')
+			. ( $style == 'nested' ? 'nested-container' : '')
+			. "'>";
+			
+			# styles
+			## basic
+			if(in_array($style, array('none', 'drop-shadow', 'nested', 'circle'))){
+				$s .= self::block_html_basic($block);
+			}
+			## bar
+			elseif('bar' == $style){
+				$s .= self::block_html_bar($block);
+			}
+			# read more
+			if($link && isset(RO3_Options::$options['read_more_yes'])){
+				$s .= '<p class="ro3-read-more"><a href="'.$link.'" '. (isset($main_color) ? 'style="color: '. $main_color .'"' : '' ) .'>Read More &raquo;</a></p>';
+			}
+		$s .= "</div>"; # .ro3-block
+		return $s;
+	} # end: block_html()
+	
+	# Basic block (none, drop-shadow, nested, circle)
+	function block_html_basic($block){
+		$s = '';
+		extract($block);
+		$style = RO3_Options::$options['style'];
+
+		# image
+		if($image){
+			# if link exists, wrap it around the image
+			if($link) $s .= "<a class='ro3-link " . (($style == "none") ? "" : $style ) . "' href='{$link}'>";
+				$s .= "<img src='{$image}'/>";
+			if($link) $s .= "</a>";
+		}
+		# header (with link if it's set)
+		$s .= "<div class='ro3-description'>";
+		$s .= "<h2>" . ( $link ? "<a href='{$link}'>" : "" ) .$title . ($link ? "</a>" : "") . "</h2>";
+		# description
+		if($description)
+			$s .= "<p>$description</p>";
+		$s .= "</div>"; # .ro3-description
+		return $s;
+	}
+	function block_html_bar($block){
+		$s = '';
+		extract($block);
+		$style = RO3_Options::$options['style'];
+		$color = RO3_Options::$options['main_color'] ? RO3_Options::$options['main_color'] : '#333';
+		
+		$s .= "<h2 style='border-bottom-color: ". $color ."'>" . ( $link ? "<a href='{$link}'>" : "" ) .$title . ($link ? "</a>" : "") . "</h2>";
+		
+		# image
+		if($image){
+			# if link exists, wrap it around the image
+			if($link) $s .= "<a class='ro3-link " . (($style == "none") ? "" : $style ) . "' href='{$link}'>";
+				$s .= "<img src='{$image}'/>";
+			if($link) $s .= "</a>";
+		}
+		# header (with link if it's set)
+		$s .= "<div class='ro3-description'>";
+		# description
+		if($description)
+			$s .= "<p>$description</p>";
+		$s .= "</div>"; # .ro3-description
+		return $s;
 	}
 	
-	/**
+	/*
 	* Helper Functions
-	**/
+	*/
+	
 	# require a file, checking first if it exists
 	static function req_file($path){ if(file_exists($path)) require_once $path; }
 	# return a permalink-friendly version of a string

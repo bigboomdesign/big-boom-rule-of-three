@@ -22,8 +22,20 @@ $susy: (
 	.ro3-block{ 
 		@include breakpoint($med) { @include span(1 of 3); }
 		&:last-child{ margin-right: 0; }
+		.ro3-read-more{
+			text-align: right;
+		}
 	}
 	@include clearfix;
+	
+	&.bar-container{
+		h2{
+			border-bottom: solid 0.8em;
+			padding-bottom: 0.5em;
+			margin-bottom: 0.5em;
+			display: block;
+		}
+	}
 }
 // css dropshadow
 .shadow-container, .nested-container{ position: relative; z-index: 1; }

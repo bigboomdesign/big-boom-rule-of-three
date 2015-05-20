@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Rule Of Three
  * Description: Uses shortcode to insert a responsive, custom-defined rule of 3 into a page or post
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Big Boom Design
  * Author URI: http://bigboomdesign.com
  */
@@ -26,6 +26,11 @@ if(ro3_should_load()) do{
 				wp_enqueue_script("ro3-settings-js", ro3_url('js/ro3-settings.js'), array('jquery'));
 				# css
 				wp_enqueue_style('ro3-admin-css', ro3_url('css/admin_comp.css'));
+				
+				# iris color picker
+				wp_enqueue_style("ro3-iris-css", ro3_url("/assets/iris/iris.min.css"));				
+				wp_enqueue_script( 'ro3-jquery-ui-js', ro3_url( '/assets/iris/jquery-ui.js'), array( 'jquery' ) );
+				wp_enqueue_script( 'ro3-iris-js', ro3_url( '/assets/iris/iris.min.js'), array( 'jquery', 'ro3-jquery-ui-js' ) );
 			}
 		}	
 		# define sections and fields for options page
@@ -60,8 +65,8 @@ if(ro3_should_load()) do{
 			wp_enqueue_script('ro3-js', ro3_url('/js/rule-of-three.js'), array('jquery'));
 		}
 		# Main container shortcode
-		function ro3_container($atts, $content = ""){ return RO3::do_container(); }
-		add_shortcode("rule-of-three", "ro3_container");
+		add_shortcode("rule-of-three", array('RO3', 'container_html'));
+		
 	} # end: front end routines
 } while(0); 
 #end main routine

@@ -114,7 +114,7 @@ class RO3_Options{
 	# Text field
 	static function text_field($setting){
 		extract($setting);
-		?><input id="<?php echo $name; ?>" name="ro3_options[<?php echo $name; ?>]" class='regular-text' type='text' value="<?php echo self::$options[$name]; ?>" />
+		?><input id="<?php echo $name; ?>" name="ro3_options[<?php echo $name; ?>]" class='regular-text<?php echo $class ? " " . $class : ''; ?>' type='text' value="<?php echo self::$options[$name]; ?>" />
 		<?php	
 	}
 	# Textarea field
@@ -299,7 +299,7 @@ $options = array(
 	array('name' => 'description', 'type' => 'textarea', 'label' => 'Description'),
 	array('name' => 'link', 'type' => 'text', 'label' => 'Link')
 );
-ro3_options::$settings = array();
+RO3_Options::$settings = array();
 for($i = 1; $i <= $n; $i++){
 	foreach($options as $option){
 		// set the section (ro3_1, ro3_2, ro3_3) and name (title1, description1, etc )
@@ -310,18 +310,27 @@ for($i = 1; $i <= $n; $i++){
 				$option['choices'][$k]['data'] = array('section' => $i);
 			}
 		}
-		ro3_options::$settings[] = $option;
+		RO3_Options::$settings[] = $option;
 	}
 }
 ### other settings
-ro3_options::$settings[] = array(
+RO3_Options::$settings[] = array(
 	'name'=>'style', 'type'=>'radio', 'label' => 'Style', 'section' => 'main',
 	'choices' => array(
 		array('value'=>'none', 'label'=>'None'),
 		array('value' => 'drop-shadow', 'label' => 'Drop Shadow'),
 		array('value' => 'nested', 'label' => 'Nested'),
-		array('value' => 'circle', 'label' => 'Circle')
+		array('value' => 'circle', 'label' => 'Circle'),
+		array('value' => 'bar', 'label' => 'Bar',)
 	)
 );
+RO3_Options::$settings[] = array(
+	'name' => 'main_color', 'type' => 'text', 'class' => 'color-picker', 'label' => 'Main Color', 'section' => 'main'
+);
+RO3_Options::$settings[] = array(
+	'name' => 'read_more', 'type' => 'checkbox', 'label' => 'Show "Read More"', 'section' => 'main',
+	'choices' => 'Yes'
+);
 ## get saved options
-ro3_options::$options = get_option('ro3_options');
+RO3_Options::$options = get_option('ro3_options');
+if(!isset(RO3_Options::$options['style'])) RO3_Options::$options['style'] = 'none';
