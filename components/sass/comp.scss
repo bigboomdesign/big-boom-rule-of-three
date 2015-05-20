@@ -25,9 +25,12 @@ $susy: (
 		.ro3-read-more{
 			text-align: right;
 		}
-	}
+	} // end: .ro3-block
 	@include clearfix;
 	
+	&.circle-container{
+		.ro3-block .ro3-read-more{ text-align: center; }
+	}
 	&.bar-container{
 		h2{
 			border-bottom: solid 0.8em;

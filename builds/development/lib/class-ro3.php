@@ -102,7 +102,7 @@ class RO3{
 				$s .= self::block_html_bar($block);
 			}
 			# read more
-			if($link && isset(RO3_Options::$options['read_more_yes'])){
+			if(('nested' != $style) && $link && isset(RO3_Options::$options['read_more_yes'])){
 				$s .= '<p class="ro3-read-more"><a href="'.$link.'" '. (isset($main_color) ? 'style="color: '. $main_color .'"' : '' ) .'>Read More &raquo;</a></p>';
 			}
 		$s .= "</div>"; # .ro3-block
