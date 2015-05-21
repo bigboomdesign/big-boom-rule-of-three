@@ -3,6 +3,9 @@ class RO3{
 	static $classes = array("ro3-options");
 	# this object hold the options for front end views
 	static $options;
+	
+	static $style; # which style is chosen (RO3_Options::$options['style'])
+	static $color;
 
 	/*
 	* Back end
@@ -113,18 +116,18 @@ class RO3{
 	function block_html_basic($block){
 		$s = '';
 		extract($block);
-		$style = RO3_Options::$options['style'];
 
 		# image
 		if($image){
 			# if link exists, wrap it around the image
-			if($link) $s .= "<a class='ro3-link " . (($style == "none") ? "" : $style ) . "' href='{$link}'>";
+			if($link) $s .= "<a class='ro3-link " . ((RO3::$style == "none") ? "" : RO3::$style ) . "' href='{$link}'>";
 				$s .= "<img src='{$image}'/>";
 			if($link) $s .= "</a>";
 		}
 		# header (with link if it's set)
 		$s .= "<div class='ro3-description'>";
-		$s .= "<h2>" . ( $link ? "<a href='{$link}'>" : "" ) .$title . ($link ? "</a>" : "") . "</h2>";
+		$s .= self::header_html($block);
+		
 		# description
 		if($description)
 			$s .= "<p>$description</p>";
@@ -134,15 +137,14 @@ class RO3{
 	function block_html_bar($block){
 		$s = '';
 		extract($block);
-		$style = RO3_Options::$options['style'];
-		$color = RO3_Options::$options['main_color'] ? RO3_Options::$options['main_color'] : '#333';
 		
-		$s .= "<h2 style='border-bottom-color: ". $color ."'>" . ( $link ? "<a href='{$link}'>" : "" ) .$title . ($link ? "</a>" : "") . "</h2>";
+		#$s .= "<h2 style='border-bottom-color: ". $color ."'>" . ( $link ? "<a href='{$link}'>" : "" ) .$title . ($link ? "</a>" : "") . "</h2>";
+		$s .= self::header_html($block);
 		
 		# image
 		if($image){
 			# if link exists, wrap it around the image
-			if($link) $s .= "<a class='ro3-link " . (($style == "none") ? "" : $style ) . "' href='{$link}'>";
+			if($link) $s .= "<a class='ro3-link " . ((RO3::$style == "none") ? "" : RO3::$style ) . "' href='{$link}'>";
 				$s .= "<img src='{$image}'/>";
 			if($link) $s .= "</a>";
 		}
@@ -158,6 +160,19 @@ class RO3{
 	/*
 	* Helper Functions
 	*/
+	
+	# return header HTML, with link if necessary
+	function header_html($block){
+		extract($block);		
+		$s = '<h2';
+			if(RO3::$style == 'bar') $s .= ' style="border-bottom-color: '. RO3::$color .'; color: '. RO3::$color .'"';
+		$s .= '>';
+		$s .= $link ? "<a href='{$link}'>" : "";
+		$s .= $title;
+		$s .= $link ? "</a>" : "";
+		$s .= '</h2>';
+		return $s;	
+	} # end: header_html()
 	
 	# require a file, checking first if it exists
 	static function req_file($path){ if(file_exists($path)) require_once $path; }
@@ -261,3 +276,5 @@ class RO3{
 
 # require files for plugin
 foreach(RO3::$classes as $class){ RO3::req_file(ro3_dir("lib/class-{$class}.php")); }
+RO3::$style = RO3_Options::$options['style'];
+RO3::$color = RO3_Options::$options['main_color'] ? RO3_Options::$options['main_color'] : '#333';
