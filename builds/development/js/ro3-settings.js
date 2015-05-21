@@ -1,15 +1,48 @@
+// font awesome size input
+var $faSizeInput;
+// fa icon size table row
+var $faSizeTr;
+
+// font awesome selection areas in blocks
+var $faInputs;
+// image selection areas in blocks
+var $imgInputs;
+
 jQuery(document).ready(function($){
-	// onclick for 'Style' radio buttons
+	$faSizeInput = $('#fa_icon_size');
+	$faSizeTr = $('#fa_icon_size').closest('tr');
+	$faInputs = $('input.fa_icon');
+	$imgInputs = $('input.image');
+	
+	/* onclick for 'Style' radio buttons */
 	$('input[name="ro3_options[style]"]').on('click', function(){
-		// clear out all preview items
-		$('#ro3-preview div[id^=preview]').css('display', 'none');
-		// get new value
-		var option = this.value;
-		// activate the preview for selected value
-		$('#ro3-preview div#preview-' + option).css('display', 'block');
+		toggleStyle(this, $);
 	});
+	/* initiate the selected style on page load */
+	toggleStyle($('input[name="ro3_options[style]"]:checked')[0], $);
+	
+	/* on keyup for font awesome icon size */
+	$('input#fa_icon_size').on('keyup', function(){
+		changeIconSize($);
+	});
+	
+	/* on keyup for font awesome icon inputs for blocks */
+	$faInputs.on('keyup', function(){
+		previewFA(this, $);
+	});	
+	
+	// initiate the preview on page load
+	$faInputs.each(function(){
+		previewFA(this, $);
+	});
+	// initiate icon size and color
+	changeIconSize($);
+	changeIconColor($);
+	
 	// color picker
-	$('.color-picker').iris();
+	$('.color-picker').iris({
+		change: function(){ changeIconColor($); }
+	});
 	
 	// onclick for post type radio buttons
 	$('input.ro3-post-type-select').on('click', function(){
@@ -87,8 +120,71 @@ jQuery(document).ready(function($){
 				$('textarea#description'+nSection).html(post.post_excerpt);
 				// link
 				$('input#link'+nSection).attr('value', post.url);
-			}
-		);
+			} // end: ajax success
+		); // end: $.post
+	}); // end: onchange for post select dropdown
+}); // end: $(document).ready()
 
-	});
-});
+/*
+* helper functions
+*/
+// open or close the font awesome input
+function toggleStyle(elem, $){
+	// clear out all preview items
+	$('#ro3-preview div[id^=preview]').css('display', 'none');
+	// get new value
+	var option = elem.value;
+	// activate the preview for selected value
+	$('#ro3-preview div#preview-' + option).css('display', 'block');
+	
+	/* for font awesome, open/close the main input area */
+	if(elem.value == 'fa-icon'){
+		// show font awesome size in main section
+		$faSizeTr.css({display: 'table-row'});
+		// show font awesome selection area in blocks
+		$faInputs.closest('tr').css({display: 'table-row'});
+		// hide post type selection radio buttons
+		$('tr.post_type').css({display: 'none'});
+		// hide image selection area in blocks
+		$imgInputs.closest('tr').css({display: 'none'});
+	}
+	/* if not font awesome */
+	else{ 
+		// hide font awesome size in main section
+		$faSizeTr.css({display: 'none'}); 
+		// hide font awesome selection area in blocks
+		$faInputs.closest('tr').css({display: 'none'});
+		// show post type selection radio buttons
+		$('tr.post_type').css({display: 'table-row'});		
+		// show image selection area in blocks
+		$imgInputs.closest('tr').css({display: 'table-row'});
+	}
+} // end: toggleStyle()
+// change the fa icon size based on input value
+function changeIconSize($){
+	var size = $('input#fa_icon_size').val();
+	$('i.fa').css({fontSize: size});
+}
+// change the fa icon color based on input value
+function changeIconColor($){
+	var color = $('input#main_color').val();
+	$('i.fa').css({ color: color });
+}
+// preview the font awesome input value for a block, given the input element
+function previewFA(elem, $){
+	// the string we're going to preview
+	var str = elem.value;
+	
+	// make sure we have a preview area 
+	var $td = $(elem).closest('td');
+	var $preview = $td.find('.ro3-fa-preview');
+	if($preview.length == 0){
+		$td.append('<div class="ro3-fa-preview"><i class=""></i></div>');
+		$preview = $td.find('.ro3-fa-preview');
+	} // end if: no preview exists
+	
+	// make sure the string starts with 'fa-'
+	if(str.substring(0,3) != 'fa-') str = 'fa-' + str;
+	// attach the class to the icon (note we'll get a broken icon if empty or mismatched)
+	$preview.find('i').attr('class', 'fa ' + str);
+}

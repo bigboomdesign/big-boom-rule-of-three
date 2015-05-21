@@ -19,20 +19,25 @@ body.toplevel_page_ro3_settings #ro3-preview img {
   width: auto;
 }
 /* line 19, ../../../components/sass/admin_comp.scss */
+body.toplevel_page_ro3_settings .ro3-fa-preview {
+  margin-top: 1em;
+  font-size: 2em;
+}
+/* line 23, ../../../components/sass/admin_comp.scss */
 body.toplevel_page_ro3_settings .post-select {
   margin-top: 1em;
 }
-/* line 21, ../../../components/sass/admin_comp.scss */
+/* line 25, ../../../components/sass/admin_comp.scss */
 body.toplevel_page_ro3_settings .post-select label {
   display: block;
 }
-/* line 25, ../../../components/sass/admin_comp.scss */
+/* line 29, ../../../components/sass/admin_comp.scss */
 body.toplevel_page_ro3_settings .ro3-thumb-preview img {
   max-width: 150px;
   height: auto;
   margin-top: 1em;
 }
-/* line 30, ../../../components/sass/admin_comp.scss */
+/* line 34, ../../../components/sass/admin_comp.scss */
 body.toplevel_page_ro3_settings label.radio {
   margin-right: 1em;
 }

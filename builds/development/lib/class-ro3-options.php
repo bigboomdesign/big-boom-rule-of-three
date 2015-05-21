@@ -120,7 +120,8 @@ class RO3_Options{
 	# Textarea field
 	static function textarea_field($setting){
 		extract($setting);
-		?><textarea id="<?php echo $name; ?>" name="ro3_options[<?php echo $name; ?>]" cols='40' rows='7'><?php echo self::$options[$name]; ?></textarea>
+		?><textarea id="<?php echo $name; ?>" name="ro3_options[<?php echo $name; ?>]" 
+			cols='40' rows='7' class='<?php echo $class ? $class : ''; ?>'><?php echo self::$options[$name]; ?></textarea>
 		<?php
 	}
 	# Checkbox field
@@ -146,6 +147,7 @@ class RO3_Options{
 	?><select 
 		id="<?php echo $name; ?>"
 		name="ro3_options[<?php echo $name; ?>]"
+		class='<?php echo $class ? $class : ''; ?>'
 		<?php
 			if(array_key_exists('data', $setting)){
 				foreach($setting['data'] as $k => $v){
@@ -224,7 +226,7 @@ class RO3_Options{
 		?><input 
 			type='text'
 			id="<?php echo $name; ?>" 
-			class='regular-text text-upload'
+			class='regular-text text-upload <?php echo $class ? $class : ''; ?>'
 			name="ro3_options[<?php echo $name; ?>]"
 			value="<?php if($value) echo esc_url( $value ); ?>"
 		/>		
@@ -295,6 +297,12 @@ $options = array(
 		),
 	),
 	array('name' => 'image', 'type' => 'single-image', 'label' => 'Image'),
+	array('name' => 'fa_icon', 'type' => 'text', 'label' => 'Font Awesome Icon',
+		'description' => 
+			'Enter the name of the icon (Ex: <code style="font-style: normal; font-weight: bold;">coffee</code>, <code style="font-style: normal; font-weight: bold;">bed</code>, etc.)<br />
+			See the list of <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">available options</a>.',
+		'class' => 'fa_icon'
+	),
 	array('name' => 'title', 'type' => 'text', 'label' => 'Title'),
 	array('name' => 'description', 'type' => 'textarea', 'label' => 'Description'),
 	array('name' => 'link', 'type' => 'text', 'label' => 'Link')
@@ -304,6 +312,9 @@ for($i = 1; $i <= $n; $i++){
 	foreach($options as $option){
 		// set the section (ro3_1, ro3_2, ro3_3) and name (title1, description1, etc )
 		$option['section'] = $i;
+		# the class shouldn't have an index
+		$option['class'] = $option['name'];
+		# the option name should have an index
 		$option['name'] = $option['name'] . $i;
 		if(array_key_exists('choices', $option)){
 			foreach($option['choices'] as $k => $v){
@@ -321,7 +332,8 @@ RO3_Options::$settings[] = array(
 		array('value' => 'drop-shadow', 'label' => 'Drop Shadow'),
 		array('value' => 'nested', 'label' => 'Nested'),
 		array('value' => 'circle', 'label' => 'Circle'),
-		array('value' => 'bar', 'label' => 'Bar',)
+		array('value' => 'bar', 'label' => 'Bar',),
+		array('value' => 'fa-icon', 'label' => 'Font Awesome'),		
 	)
 );
 RO3_Options::$settings[] = array(
@@ -331,6 +343,14 @@ RO3_Options::$settings[] = array(
 	'name' => 'read_more', 'type' => 'checkbox', 'label' => 'Show "Read More"', 'section' => 'main',
 	'choices' => 'Yes'
 );
+RO3_Options::$settings[] = array(
+	'name' => 'fa_icon_size', 'type' => 'text', 'label' => 'Font Awesome Icon Size', 'section' => 'main',
+	'description' => 
+		'Please enter a valid CSS value like <code>24px</code> or <code>2em</code>.<br />
+		Note that <code>em\'s</code> may generate a different preview size here than on the front end.',
+);
 ## get saved options
 RO3_Options::$options = get_option('ro3_options');
 if(!isset(RO3_Options::$options['style'])) RO3_Options::$options['style'] = 'none';
+if(!isset(RO3_Options::$options['main_color'])) RO3_Options::$options['main_color'] = '#333';
+if(!isset(RO3_Options::$options['fa_icon_size'])) RO3_Options::$options['fa_icon_size'] = '2em';

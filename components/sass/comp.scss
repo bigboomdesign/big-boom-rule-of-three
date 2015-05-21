@@ -16,7 +16,12 @@ $susy: (
 #ro3-container{
 	padding-top: 1em;
 	img{ max-width: 100%; height: auto; }
-
+	h2{
+		padding: 0.5em 0;
+		margin: 0;
+	}
+	p.ro3-read-more{ margin-top: 1em; }
+	
 	@include container(100%);
 	overflow: visible !important;
 	.ro3-block{ 
@@ -116,4 +121,8 @@ div.circle-container{
 		border-radius: 0 0 0.5em 0.5em;
 		box-sizing: border-box;
 	}
+}
+#ro3-container.fa-icon-container{
+	text-align: center;
+	.ro3-block .ro3-read-more{ text-align: center; }
 }

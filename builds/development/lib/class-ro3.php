@@ -10,6 +10,26 @@ class RO3{
 	/*
 	* Back end
 	*/
+	function admin_enqueue(){
+		# make sure we only load our scripts on the ro3_settings page
+		$screen = get_current_screen();
+		if($screen->id == "toplevel_page_ro3_settings"){
+			# js
+			wp_enqueue_media();	
+			wp_enqueue_script("media-single-js", ro3_url('js/media-single.js'), array('media-views', 'jquery'));
+			wp_enqueue_script("ro3-settings-js", ro3_url('js/ro3-settings.js'), array('jquery'));
+			# css
+			wp_enqueue_style('ro3-admin-css', ro3_url('css/admin_comp.css'));
+			
+			# iris color picker
+			wp_enqueue_style("ro3-iris-css", ro3_url("/assets/iris/iris.min.css"));				
+			wp_enqueue_script( 'ro3-jquery-ui-js', ro3_url( '/assets/iris/jquery-ui.js'), array( 'jquery' ) );
+			wp_enqueue_script( 'ro3-iris-js', ro3_url( '/assets/iris/iris.min.js'), array( 'jquery', 'ro3-jquery-ui-js' ) );
+			
+			# font awesome
+			wp_enqueue_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css'));
+		}
+	}	
 	static function select_post_for_type($post_type, $section = ''){
 		$args = array(
 			'post_type' => $post_type,
@@ -34,11 +54,18 @@ class RO3{
 		);
 		?></div>
 		<?php	
-	}
+	} # end:  select_post_for_type()
 
 	/*
 	* Front End
 	*/
+	
+	function enqueue(){
+		wp_enqueue_style('ro3-css', ro3_url('/css/comp.css'));
+		wp_enqueue_script('ro3-js', ro3_url('/js/rule-of-three.js'), array('jquery'));
+		# font awesome
+		wp_enqueue_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css'));			
+	} # end: enqueue()
 	
 	# response for shortcode [rule-of-three]
 	static function container_html(){
@@ -72,6 +99,10 @@ class RO3{
 		## image
 		$imgname = 'image'.$i;
 		$image = isset($$imgname) ? $$imgname : '';
+		
+		## font awesome icon
+		$faname = 'fa_icon'.$i;
+		$fa_icon = isset($$faname) ? $$faname : '';
 
 		## link
 		$linkname = 'link'.$i;
@@ -85,6 +116,7 @@ class RO3{
 		$block = array(
 			'title' => $title,
 			'image' => $image,
+			'fa_icon' => $fa_icon,
 			'link' => $link,
 			'description' => $description,
 		);
@@ -103,6 +135,10 @@ class RO3{
 			## bar
 			elseif('bar' == $style){
 				$s .= self::block_html_bar($block);
+			}
+			## font awesome
+			elseif('fa-icon' == $style){
+				$s .= self::block_html_fa($block);
 			}
 			# read more
 			if(('nested' != $style) && $link && isset(RO3_Options::$options['read_more_yes'])){
@@ -134,6 +170,7 @@ class RO3{
 		$s .= "</div>"; # .ro3-description
 		return $s;
 	}
+	# block for Bar style
 	function block_html_bar($block){
 		$s = '';
 		extract($block);
@@ -156,6 +193,16 @@ class RO3{
 		$s .= "</div>"; # .ro3-description
 		return $s;
 	}
+	# block for Font Awesome style
+	function block_html_fa($block){
+		$s = '';
+		extract($block);
+		
+		if($fa_icon) $s .= self::fa_icon_html($block);
+		$s .= self::header_html($block);
+		$s .= self::description_html($block);
+		return $s;
+	}
 	
 	/*
 	* Helper Functions
@@ -173,6 +220,38 @@ class RO3{
 		$s .= '</h2>';
 		return $s;	
 	} # end: header_html()
+	
+	function description_html($block){
+		$s = '';
+		extract($block);
+		if(!$block['description']) return $s;
+		$s = '<div class="ro3-description">';
+			$s .= '<p>'. $block['description'] .'</p>';
+		$s .= '</div>';
+		return $s;
+	} # end: description_html()
+	
+	# return HTML for font awesome icon
+	# we can be given a string or an array for a block
+	function fa_icon_html($block){
+		$size = RO3_Options::$options['fa_icon_size'];
+		$color = RO3::$color;
+		
+		$fa_icon = is_string($block) ? $block : $block['fa_icon'];
+		if(is_array($block)) extract($block);
+		
+		$s = '';
+		if($link) $s .= '<a href="'. $link .'">';
+		$s .= '<i style="color: '. $color .'; font-size: '. $size .'" class="fa '. self::pad_fa($fa_icon) .'"></i>';
+		if($link) $s .= '</a>';
+		return $s;
+	}
+
+	# prepend 'fa-' to font awesome icon name if necessary
+	function pad_fa($str){
+		if('fa-' != substr($str,0,3)) $str = 'fa-'.$str;
+		return $str;
+	}
 	
 	# require a file, checking first if it exists
 	static function req_file($path){ if(file_exists($path)) require_once $path; }
@@ -277,4 +356,4 @@ class RO3{
 # require files for plugin
 foreach(RO3::$classes as $class){ RO3::req_file(ro3_dir("lib/class-{$class}.php")); }
 RO3::$style = RO3_Options::$options['style'];
-RO3::$color = RO3_Options::$options['main_color'] ? RO3_Options::$options['main_color'] : '#333';
+RO3::$color = RO3_Options::$options['main_color'];

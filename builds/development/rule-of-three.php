@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Rule Of Three
  * Description: Uses shortcode to insert a responsive, custom-defined rule of 3 into a page or post
- * Version: 0.2.2
+ * Version: 0.3.0
  * Author: Big Boom Design
  * Author URI: http://bigboomdesign.com
  */
@@ -15,24 +15,8 @@ if(ro3_should_load()) do{
 	# Admin Routines
 	if(is_admin()){
 		# Scripts and styles
-		add_action("admin_enqueue_scripts", "ro3_admin_scripts");
-		function ro3_admin_scripts(){
-			# make sure we only load our scripts on the ro3_settings page
-			$screen = get_current_screen();
-			if($screen->id == "toplevel_page_ro3_settings"){
-				# js
-				wp_enqueue_media();	
-				wp_enqueue_script("media-single-js", ro3_url('js/media-single.js'), array('media-views', 'jquery'));
-				wp_enqueue_script("ro3-settings-js", ro3_url('js/ro3-settings.js'), array('jquery'));
-				# css
-				wp_enqueue_style('ro3-admin-css', ro3_url('css/admin_comp.css'));
-				
-				# iris color picker
-				wp_enqueue_style("ro3-iris-css", ro3_url("/assets/iris/iris.min.css"));				
-				wp_enqueue_script( 'ro3-jquery-ui-js', ro3_url( '/assets/iris/jquery-ui.js'), array( 'jquery' ) );
-				wp_enqueue_script( 'ro3-iris-js', ro3_url( '/assets/iris/iris.min.js'), array( 'jquery', 'ro3-jquery-ui-js' ) );
-			}
-		}	
+		add_action("admin_enqueue_scripts", array('RO3', 'admin_enqueue'));
+	
 		# define sections and fields for options page
 		add_action('admin_init', 'ro3_init');
 		function ro3_init(){ RO3_Options::register_settings(); }
@@ -59,11 +43,8 @@ if(ro3_should_load()) do{
 	# Front end routines
 	else{
 		# scripts and styles
-		add_action('wp_enqueue_scripts', 'ro3_enqueue_scripts');
-		function ro3_enqueue_scripts(){
-			wp_enqueue_style('ro3-css', ro3_url('/css/comp.css'));
-			wp_enqueue_script('ro3-js', ro3_url('/js/rule-of-three.js'), array('jquery'));
-		}
+		add_action('wp_enqueue_scripts', array('RO3','enqueue'));
+		
 		# Main container shortcode
 		add_shortcode("rule-of-three", array('RO3', 'container_html'));
 		
