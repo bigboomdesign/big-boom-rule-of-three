@@ -78,7 +78,7 @@ class RO3_Options{
 			<div 
 				id="post-select-<?php echo $section; ?>"
 				class='post-select' 
-				style="display: <?php echo (isset(RO3_Options::$options['post_type'.$section])) ? 'block' : 'none';?>;"
+				style="display: <?php echo (!empty(RO3_Options::$options['post_type'.$section])) ? 'block' : 'none';?>;"
 			><?php RO3::select_post_for_type(RO3_Options::$options['post_type'.$section], $section); ?>
 			</div>
 		<?php
@@ -114,7 +114,13 @@ class RO3_Options{
 	# Text field
 	static function text_field($setting){
 		extract($setting);
-		?><input id="<?php echo $name; ?>" name="ro3_options[<?php echo $name; ?>]" class='regular-text<?php echo $class ? " " . $class : ''; ?>' type='text' value="<?php echo self::$options[$name]; ?>" />
+		?><input 
+			id="<?php echo $name; ?>" 
+			name="ro3_options[<?php echo $name; ?>]" 
+			class="regular-text <?php if(isset($class)) echo $class; ?>" 
+			type='text' 
+			value="<?php echo self::$options[$name]; ?>" 
+		/>
 		<?php	
 	}
 	# Textarea field
@@ -147,14 +153,13 @@ class RO3_Options{
 	?><select 
 		id="<?php echo $name; ?>"
 		name="ro3_options[<?php echo $name; ?>]"
-		class='<?php echo $class ? $class : ''; ?>'
+		<?php if(isset($class)) echo  "class='{$class}'"; ?>
 		<?php
 			if(array_key_exists('data', $setting)){
 				foreach($setting['data'] as $k => $v){
 					echo " data-{$k}='{$v}'";
 				}
 			}
-			if($class) echo " class='".$class."'";
 		?>
 	>
 		<?php 
@@ -183,7 +188,7 @@ class RO3_Options{
 				?>
 					<option 
 						value="<?php echo $value; ?>"
-						<?php selected(RO3_Options::$options[$name], $value ); ?>					
+						<?php if(isset(RO3_Options::$options[$name])) selected(RO3_Options::$options[$name], $value ); ?>					
 					><?php echo $label; ?></option>
 				<?php
 				} # end foreach: $choices
@@ -212,7 +217,8 @@ class RO3_Options{
 					}
 				}
 				# add checked property if we need to
-				checked($value, self::$options[$name]); ?>
+				if(isset(self::$options[$name])) checked($value, self::$options[$name]); ?>
+				autocomplete='off'
 			/>&nbsp;<?php echo $label; ?></label>&nbsp;&nbsp;
 			<?php
 		}
@@ -253,13 +259,19 @@ class RO3_Options{
 		## get choices for custom post types
 		$pt_args = array(
 			'_builtin' => false,
-			'publicly_queryable' => false
+			'public' => true
 		);
 		$pts = get_post_types($pt_args, 'objects');
 		# loop through settings and register
 		foreach(RO3_Options::$settings as $setting){
 			# add choices for custom post types
 			foreach($pts as $pt){
+				# make sure we have published posts for this post type
+				if(!get_posts(
+					array(
+						'post_type' => $pt->name, 'post_status' => 'publish'
+					)
+				)) continue;
 				if(strpos($setting['name'],'post_type') === 0){
 					$setting['choices'][] = array(
 						'label' => $pt->labels->name, 
@@ -282,8 +294,10 @@ class RO3_Options{
 			</form>
 		</div><?php
 	}
-}
+} # end class: RO3_Options
+
 # Initialize static variables
+
 ## generate all settings for backend
 
 ### settings that will come in 3's (one for each block)
@@ -312,8 +326,10 @@ for($i = 1; $i <= $n; $i++){
 	foreach($options as $option){
 		// set the section (ro3_1, ro3_2, ro3_3) and name (title1, description1, etc )
 		$option['section'] = $i;
+
 		# the class shouldn't have an index
-		$option['class'] = $option['name'];
+		$option['class'] = $option['name'] . (array_key_exists('class', $option) ? ' ' . $option['class'] : '');
+
 		# the option name should have an index
 		$option['name'] = $option['name'] . $i;
 		if(array_key_exists('choices', $option)){
@@ -351,6 +367,22 @@ RO3_Options::$settings[] = array(
 );
 ## get saved options
 RO3_Options::$options = get_option('ro3_options');
+
+## if no options are set, make sure at least all keys are present in CPTD_Options::$options
+if(!RO3_Options::$options){
+
+	# make sure all the keys exist in our options
+	foreach(RO3_Options::$settings as $setting){
+		RO3_Options::$options[$setting['name']] = '';
+	}
+}
+
+# set the defaults that we want to implement
+if(!RO3_Options::$options['style']) RO3_Options::$options['style'] = 'none';
+if(!RO3_Options::$options['main_color']) RO3_Options::$options['main_color'] = '#333';
+if(!RO3_Options::$options['fa_icon_size']) RO3_Options::$options['fa_icon_size'] = '2em';
+/*
 if(!isset(RO3_Options::$options['style'])) RO3_Options::$options['style'] = 'none';
 if(!isset(RO3_Options::$options['main_color'])) RO3_Options::$options['main_color'] = '#333';
 if(!isset(RO3_Options::$options['fa_icon_size'])) RO3_Options::$options['fa_icon_size'] = '2em';
+*/

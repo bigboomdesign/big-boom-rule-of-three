@@ -7,10 +7,18 @@ class RO3{
 	static $style; # which style is chosen (RO3_Options::$options['style'])
 	static $color;
 
-	/*
-	* Back end
-	*/
-	function admin_enqueue(){
+	/**
+	 * Back end routines
+	 * 
+	 * - admin_enqueue()
+	 * - select_post_for_type()
+	 */
+
+	/**
+	 * Enqueue styles and scripts for /wp-admin
+	 */
+
+	public static function admin_enqueue(){
 		# make sure we only load our scripts on the ro3_settings page
 		$screen = get_current_screen();
 		if($screen->id == "toplevel_page_ro3_settings"){
@@ -30,7 +38,15 @@ class RO3{
 			wp_enqueue_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css'));
 		}
 	}	
-	static function select_post_for_type($post_type, $section = ''){
+
+	/**
+	 * Output HTML for a <select> dropdown menu of posts for a given post type
+	 *
+	 * @param 	string 	$post_type 		The post type for which we're displaying posts
+	 * @return 	null
+	 */
+
+	public static function select_post_for_type($post_type, $section = ''){
 		$args = array(
 			'post_type' => $post_type,
 			'posts_per_page' => -1,
@@ -46,7 +62,7 @@ class RO3{
 			$choices[] = $choice;
 		}
 		RO3_Options::do_settings_field(
-			array('name' => 'post_id'.$section, 'type' => 'select', 'label' => $post->post_title,
+			array('name' => 'post_id'.$section, 'type' => 'select', 'label' => '',
 				'data' => array('section' => $section),
 				'choices' => $choices,
 				'description' => '<b>Note:</b> Below, you have the option to alter the title, description, image, etc. for the post you choose.  Changes to the post do not auto update here.'
@@ -56,11 +72,27 @@ class RO3{
 		<?php	
 	} # end:  select_post_for_type()
 
-	/*
-	* Front End
-	*/
+	/**
+	 * Front end routines
+	 *
+	 * - enqueue()
+	 * - container_html()
+	 * - block_html()
+	 * - block_html_basic()
+	 * - block_html_bar()
+	 * - block_html_fa()
+	 * - header_html()
+	 * - description_html()
+	 * - fa_icon_html()
+	 * - pad_fa()
+	 * - req_file()
+	 * - clean_str_for_url()
+	 * - clean_str_for_field()
+	 * - get_field_array()
+	 * - get_choice_array()
+	 */
 	
-	function enqueue(){
+	public static function enqueue(){
 		wp_enqueue_style('ro3-css', ro3_url('/css/comp.css'));
 		wp_enqueue_script('ro3-js', ro3_url('/js/rule-of-three.js'), array('jquery'));
 		# font awesome
@@ -71,11 +103,12 @@ class RO3{
 	static function container_html(){
 		extract(RO3_Options::$options);
 		# do nothing if we don't have at least 1 title set
-		if(!$title1 && !$title2 && !$title3) return;
+		if(empty($title1) && empty($title2) && empty($title3)) return;
 		
 		# number of columns we'll have
 		$n = 3;
 		# string to return
+		$s = '';
 		$s .= "<div id='ro3-container' class='" . $style . "-container'>";
 		for($i = 1; $i <= $n; $i++){
 			$s .= self::block_html($i);
@@ -85,7 +118,7 @@ class RO3{
 	} # end: container_html()
 	
 	# get HTML for block $i
-	function block_html($i){
+	public static function block_html($i){
 		# the string we'll return
 		$s = '';
 		# plugin options
@@ -149,7 +182,7 @@ class RO3{
 	} # end: block_html()
 	
 	# Basic block (none, drop-shadow, nested, circle)
-	function block_html_basic($block){
+	public static function block_html_basic($block){
 		$s = '';
 		extract($block);
 
@@ -170,8 +203,9 @@ class RO3{
 		$s .= "</div>"; # .ro3-description
 		return $s;
 	}
+
 	# block for Bar style
-	function block_html_bar($block){
+	public static function block_html_bar($block){
 		$s = '';
 		extract($block);
 		
@@ -194,7 +228,7 @@ class RO3{
 		return $s;
 	}
 	# block for Font Awesome style
-	function block_html_fa($block){
+	public static function block_html_fa($block){
 		$s = '';
 		extract($block);
 		
@@ -209,7 +243,7 @@ class RO3{
 	*/
 	
 	# return header HTML, with link if necessary
-	function header_html($block){
+	public static function header_html($block){
 		extract($block);		
 		$s = '<h2';
 			if(RO3::$style == 'bar') $s .= ' style="border-bottom-color: '. RO3::$color .'; color: '. RO3::$color .'"';
@@ -221,7 +255,7 @@ class RO3{
 		return $s;	
 	} # end: header_html()
 	
-	function description_html($block){
+	public static function description_html($block){
 		$s = '';
 		extract($block);
 		if(!$block['description']) return $s;
@@ -233,7 +267,7 @@ class RO3{
 	
 	# return HTML for font awesome icon
 	# we can be given a string or an array for a block
-	function fa_icon_html($block){
+	public static function fa_icon_html($block){
 		$size = RO3_Options::$options['fa_icon_size'];
 		$color = RO3::$color;
 		
@@ -248,7 +282,7 @@ class RO3{
 	}
 
 	# prepend 'fa-' to font awesome icon name if necessary
-	function pad_fa($str){
+	public static function pad_fa($str){
 		if('fa-' != substr($str,0,3)) $str = 'fa-'.$str;
 		return $str;
 	}
@@ -350,7 +384,8 @@ class RO3{
 			}
 		}
 		return $out;
-	}	
+	} # end: get_choice_array()
+
 } # end class RO3
 
 # require files for plugin

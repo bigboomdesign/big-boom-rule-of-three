@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Rule Of Three
  * Description: Uses shortcode to insert a responsive, custom-defined rule of 3 into a page or post
- * Version: 0.3.0
+ * Version: 0.4.0
  * Author: Big Boom Design
  * Author URI: http://bigboomdesign.com
  */
