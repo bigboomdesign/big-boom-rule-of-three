@@ -1,4 +1,14 @@
-# WP Rule Of Three
+=== Big Boom Rule Of Three ===
+Contributors: bigboomdesign, michaelhull
+Tags: responsive, layout builder, call to action, rule of three
+Requires at least: 4.0
+Tested up to: 4.3.1
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+Easily build responsive blocks of content for your site
+
+== Description ==
 
 Create your content blocks on the plugin settings page and then use shortcode `[rule-of-three]` to insert the content you create anywhere on your site.  The plugin provides several options as to how your blocks will be displayed on the front end:
 
@@ -19,3 +29,29 @@ Additional Features:
 * Option to include "Read More" link with each block
 
 For best results, make sure the images you use for each content block have the same aspect ratio. 
+
+
+== Installation ==
+
+* Go To Plugins >> Add New
+* Either search for \"Big Boom\" or Upload the .zip file downloaded here.
+* Once installed, go to the `Rule Of Three` admin menu item and set up your content
+* Use the shortcode [rule-of-three] in a page/post/widget/etc to insert the content into the front end
+
+== Frequently Asked Questions ==
+
+None yet.
+
+== Screenshots ==
+
+1. A single block with no styling
+2. A single block with Drop Shadow styling
+3. A single block with Nested styling
+4. A single block with Circle styling
+5. A single block with Bar styling
+6. A single block using Font Awesome mode
+
+
+== Changelog ==
+
+None yet.

@@ -1,18 +1,60 @@
 <?php
+/**
+ * Handles the display, saving, and init/retrieval of options for the plugin
+ *
+ * Static variables are set after class definition below
+ */
 class RO3_Options{
-	# Static variables are set after class definition
-	## available settings
+
+	/**
+	 * The available settings for the plugin.
+	 * 
+	 * @type array 	$settings{
+	 *		@type array ...,
+	 * 		@type array ...,
+	 *		...
+	 * }
+ 	 */
 	static $settings;
-	## saved options
+	
+	/**
+	 * Saved options by the user. In addition to the defaults below, the array contains
+	 * a key for each corresponding `name` in the self::$settings array
+	 *
+	 * Default values:
+	 *
+	 * @type array 	$options{
+	 * 		@type string  	$style 			The display style for the plugin (Default: 'none')
+	 * 		@type string 	$main_color		A valid CSS color to use as the main color on the front end (Default: '#333')
+	 * 		@type string 	$fa_icon_size 	A valid CSS font size for the Font Awesome Icon, if used (Default: '2em')
+	 * }
+	 */
 	static $options = array();
 	
-	var $sections;
-	var $fields;
 	
-	# Display field input
-	static function do_settings_field($setting){
+	/**
+	 * Display a plugin settings form element
+	 *
+	 * @param 	string|array 	$setting{
+	 *
+	 *		Use string for simple fields. Array will contain information about the
+	 *		setting that we'll use to create the form element
+	 *
+	 *		@type 	string 			$label 		Required. The label for the form element	 
+	 * 		@type 	string 			$name 		Optional. The HTML name attribute. Will be auto-generated from label if empty
+	 * 		@type 	string 			$id 		Optional. The HTML `id` attribute for the form element. Will be auto-generated from label if empty
+	 *		@type 	string 			$type 		Optional. The type of form element to display (text|textarea|checkbox|select|single-image|radio) (Default: 'text')
+	 * 		@type 	string 			$value 		Optional. The value of the HTML `value` attribute
+	 * 		@type 	array|string 	$choices 	Optional. The choices for the form element (for select, radio, checkbox)
+	 * } 
+	 */
+	public static function do_settings_field($setting){
+
+		# auto-complete the setting keys that may not be set
 		$setting = RO3::get_field_array($setting);
+
 		extract(RO3_Options::$options);
+
 		# call one of several functions based on what type of field we have
 		switch($setting['type']){
 			case "textarea":
@@ -109,10 +151,16 @@ class RO3_Options{
 					}
 				} # end: choice has children
 			} # end: foreach: choices
-		} # end: setting has choices		
-	}
-	# Text field
-	static function text_field($setting){
+		} # end: setting has choices
+	} # end: do_settings_field()
+
+	/**
+	 * Display a text input element
+	 *
+	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
+	 * @return 	null
+	 */
+	public static function text_field($setting){
 		extract($setting);
 		?><input 
 			id="<?php echo $name; ?>" 
@@ -122,16 +170,26 @@ class RO3_Options{
 			value="<?php echo self::$options[$name]; ?>" 
 		/>
 		<?php	
-	}
-	# Textarea field
-	static function textarea_field($setting){
+	} # end: text_field()
+
+	/**
+	 * Display a textarea element
+	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
+	 * @return 	null
+	 */
+	public static function textarea_field($setting){
 		extract($setting);
 		?><textarea id="<?php echo $name; ?>" name="ro3_options[<?php echo $name; ?>]" 
 			cols='40' rows='7' class='<?php echo $class ? $class : ''; ?>'><?php echo self::$options[$name]; ?></textarea>
 		<?php
-	}
-	# Checkbox field
-	static function checkbox_field($setting){
+	} # end: textarea_field()
+
+	/**
+	 * Display one or more checkboxes
+	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
+	 * @return 	null
+	 */
+	public static function checkbox_field($setting){
 		extract($setting);
 		foreach($choices as $choice){
 		?><label class='checkbox' for="<?php echo $choice['id']; ?>">
@@ -147,58 +205,68 @@ class RO3_Options{
 		<?php
 		}
 	}
-	# <select> dropdown field
-	static function select_field($setting){
+
+	/**
+	 * Display a <select> dropdown element
+	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
+	 * @return 	null
+	 */
+	public static function select_field($setting){
 		extract($setting);
-	?><select 
-		id="<?php echo $name; ?>"
-		name="ro3_options[<?php echo $name; ?>]"
-		<?php if(isset($class)) echo  "class='{$class}'"; ?>
-		<?php
-			if(array_key_exists('data', $setting)){
-				foreach($setting['data'] as $k => $v){
-					echo " data-{$k}='{$v}'";
-				}
-			}
-		?>
-	>
-		<?php 
-			# if we are given a string for $choices (i.e. single choice)
-			if(is_string($choices)) {
-				?><option 
-					value="<?php echo RO3::clean_str_for_field($choices); ?>"
-					<?php selected(RO3_Options::$options[$name], RO3::clean_str_for_field($choice) ); ?>
-				><?php echo $choices; ?>
-				</option>
+		?><select 
+			id="<?php echo $name; ?>"
+			name="ro3_options[<?php echo $name; ?>]"
+			<?php if(isset($class)) echo  "class='{$class}'"; ?>
 			<?php
-			}
-			# if $choices is an array
-			elseif(is_array($choices)){
-				foreach($choices as $choice){
-					# if $choice is a string
-					if(is_string($choice)){
-						$label = $choice;
-						$value = RO3::clean_str_for_field($choice);
+				if(array_key_exists('data', $setting)){
+					foreach($setting['data'] as $k => $v){
+						echo " data-{$k}='{$v}'";
 					}
-					# if $choice is an array
-					elseif(is_array($choice)){
-						$label = $choice['label'];
-						$value = isset($choice['value']) ? $choice['value'] : RO3::clean_str_for_field($choice['label']);
-					}
-				?>
-					<option 
-						value="<?php echo $value; ?>"
-						<?php if(isset(RO3_Options::$options[$name])) selected(RO3_Options::$options[$name], $value ); ?>					
-					><?php echo $label; ?></option>
+				}
+			?>
+		>
+			<?php 
+				# if we are given a string for $choices (i.e. single choice)
+				if(is_string($choices)) {
+					?><option 
+						value="<?php echo RO3::clean_str_for_field($choices); ?>"
+						<?php selected(RO3_Options::$options[$name], RO3::clean_str_for_field($choice) ); ?>
+					><?php echo $choices; ?>
+					</option>
 				<?php
-				} # end foreach: $choices
-			} # endif: $choices is an array
-		?>
-		
-	</select><?php
+				}
+				# if $choices is an array
+				elseif(is_array($choices)){
+					foreach($choices as $choice){
+						# if $choice is a string
+						if(is_string($choice)){
+							$label = $choice;
+							$value = RO3::clean_str_for_field($choice);
+						}
+						# if $choice is an array
+						elseif(is_array($choice)){
+							$label = $choice['label'];
+							$value = isset($choice['value']) ? $choice['value'] : RO3::clean_str_for_field($choice['label']);
+						}
+					?>
+						<option 
+							value="<?php echo $value; ?>"
+							<?php if(isset(RO3_Options::$options[$name])) selected(RO3_Options::$options[$name], $value ); ?>					
+						><?php echo $label; ?></option>
+					<?php
+					} # end foreach: $choices
+				} # endif: $choices is an array
+			?>
+			
+		</select><?php
 	}
-	# Radio Button field
-	static function radio_field($setting){
+
+	/**
+	 * Display a group of radio buttons
+	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
+	 * @return 	null
+	 */
+	public static function radio_field($setting){
 		extract($setting);
 		$choices = RO3::get_choice_array($setting);
 		foreach($choices as $choice){
@@ -223,8 +291,13 @@ class RO3_Options{
 			<?php
 		}
 	}
-	# Image field
-	static function image_field($setting){
+
+	/**
+	 * Display an image upload element that uses the WP Media browser
+	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
+	 * @return 	null
+	 */
+	public static function image_field($setting){
 		# this will set $name for the field
 		extract($setting);
 		# current value for the field
@@ -246,8 +319,11 @@ class RO3_Options{
 		</div>
 		<?php
 	}
-	# Register settings
-	static function register_settings(){
+
+	/**
+	 * Register settings
+	 */
+	public static function register_settings(){
 		register_setting( 'ro3_options', 'ro3_options', 'ro3_options_validate' );
 		add_settings_section('ro3_main', '', 'ro3_main_section_text', 'ro3_settings');
 		
@@ -284,7 +360,7 @@ class RO3_Options{
 		}	
 	}
 	# Do settings page
-	static function settings_page(){
+	public static function settings_page(){
 		?><div>
 			<h2>Rule of Three Settings</h2>
 			<form action="options.php" method="post">
@@ -296,11 +372,18 @@ class RO3_Options{
 	}
 } # end class: RO3_Options
 
-# Initialize static variables
+/**
+ * Initialize static variables
+ *
+ * - set up backend available settings
+ * - get saved options and set up defaults
+ */
 
-## generate all settings for backend
+/**
+ * Set up backend available settings
+ */
 
-### settings that will come in 3's (one for each block)
+# settings that will come in 3's (one for each block)
 $n = 3;
 $options = array(
 	array('name' => 'post_type', 'type' => 'radio', 'label' => 'Use Existing Content',
@@ -321,8 +404,11 @@ $options = array(
 	array('name' => 'description', 'type' => 'textarea', 'label' => 'Description'),
 	array('name' => 'link', 'type' => 'text', 'label' => 'Link')
 );
+
+# feed the above settings into RO3_Options::$settings in 3's
 RO3_Options::$settings = array();
 for($i = 1; $i <= $n; $i++){
+
 	foreach($options as $option){
 		// set the section (ro3_1, ro3_2, ro3_3) and name (title1, description1, etc )
 		$option['section'] = $i;
@@ -332,15 +418,20 @@ for($i = 1; $i <= $n; $i++){
 
 		# the option name should have an index
 		$option['name'] = $option['name'] . $i;
+
+		# Add a `data-section=$i` attribute to each choice for this option if choices exist
 		if(array_key_exists('choices', $option)){
 			foreach($option['choices'] as $k => $v){
 				$option['choices'][$k]['data'] = array('section' => $i);
 			}
 		}
+
 		RO3_Options::$settings[] = $option;
-	}
-}
-### other settings
+
+	} # end foreach: grouped options
+} # end for: $i < $n
+
+# main settings section
 RO3_Options::$settings[] = array(
 	'name'=>'style', 'type'=>'radio', 'label' => 'Style', 'section' => 'main',
 	'choices' => array(
@@ -365,14 +456,20 @@ RO3_Options::$settings[] = array(
 		'Please enter a valid CSS value like <code>24px</code> or <code>2em</code>.<br />
 		Note that <code>em\'s</code> may generate a different preview size here than on the front end.',
 );
-## get saved options
+
+/**
+ * Get saved options and define defaults
+ */
+
 RO3_Options::$options = get_option('ro3_options');
 
-## if no options are set, make sure at least all keys are present in CPTD_Options::$options
+# if no options have been saved yet, make sure at least all keys are present in CPTD_Options::$options
 if(!RO3_Options::$options){
 
-	# make sure all the keys exist in our options
+	# loop through settings
 	foreach(RO3_Options::$settings as $setting){
+
+		# add key to options
 		RO3_Options::$options[$setting['name']] = '';
 	}
 }
@@ -381,8 +478,3 @@ if(!RO3_Options::$options){
 if(!RO3_Options::$options['style']) RO3_Options::$options['style'] = 'none';
 if(!RO3_Options::$options['main_color']) RO3_Options::$options['main_color'] = '#333';
 if(!RO3_Options::$options['fa_icon_size']) RO3_Options::$options['fa_icon_size'] = '2em';
-/*
-if(!isset(RO3_Options::$options['style'])) RO3_Options::$options['style'] = 'none';
-if(!isset(RO3_Options::$options['main_color'])) RO3_Options::$options['main_color'] = '#333';
-if(!isset(RO3_Options::$options['fa_icon_size'])) RO3_Options::$options['fa_icon_size'] = '2em';
-*/

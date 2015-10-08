@@ -1,11 +1,28 @@
 <?php
+/**
+ * Helper class to handle plugin functionality. Static variables are set below class definition
+ *
+ * @since 	1.0.0
+ */
 class RO3{
+
+	/**
+	 * @param 	array 	The classes this plugin depends on
+	 * @since 	1.0.0
+	 */
 	static $classes = array("ro3-options");
-	# this object hold the options for front end views
-	static $options;
-	
-	static $style; # which style is chosen (RO3_Options::$options['style'])
+
+	/**
+	 * @param 	string 	Which style is chosen (shortcut for RO3_Options::$options['style'])
+	 * @since 	1.0.0
+	 */	
+	static $style;
+
+	/**
+	 * @param 	string 	The hex color selected as the main front end color (shortuc for RO3_Options::$options['color'])
+	 */
 	static $color;
+
 
 	/**
 	 * Back end routines
@@ -37,7 +54,7 @@ class RO3{
 			# font awesome
 			wp_enqueue_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css'));
 		}
-	}	
+	} # end: admin_enqueue()
 
 	/**
 	 * Output HTML for a <select> dropdown menu of posts for a given post type
@@ -72,35 +89,45 @@ class RO3{
 		<?php	
 	} # end:  select_post_for_type()
 
+
 	/**
 	 * Front end routines
 	 *
-	 * - enqueue()
-	 * - container_html()
-	 * - block_html()
-	 * - block_html_basic()
-	 * - block_html_bar()
-	 * - block_html_fa()
-	 * - header_html()
-	 * - description_html()
-	 * - fa_icon_html()
-	 * - pad_fa()
-	 * - req_file()
-	 * - clean_str_for_url()
-	 * - clean_str_for_field()
-	 * - get_field_array()
-	 * - get_choice_array()
+	 * - WP hook callbacks
+	 * - Shortcodes
+	 * - Shortcode helpers
+	 * - General helper functions
 	 */
 	
+	/**
+	 * WP hook callbacks
+	 *
+	 * - enqueue()
+	 */
+
+	/**
+	 * Callback for 'wp_enqueue_scripts'
+	 * @since 	1.0.0
+	 */
 	public static function enqueue(){
 		wp_enqueue_style('ro3-css', ro3_url('/css/comp.css'));
 		wp_enqueue_script('ro3-js', ro3_url('/js/rule-of-three.js'), array('jquery'));
 		# font awesome
 		wp_enqueue_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css'));			
 	} # end: enqueue()
-	
-	# response for shortcode [rule-of-three]
-	static function container_html(){
+
+
+	/**
+	 * Shortcodes
+	 * 
+	 * - container_html()
+	 */
+
+	/**
+	 * Callback for shortcode [rule-of-three]
+	 * @since 	1.0.0
+	 */
+	public static function container_html(){
 		extract(RO3_Options::$options);
 		# do nothing if we don't have at least 1 title set
 		if(empty($title1) && empty($title2) && empty($title3)) return;
@@ -117,6 +144,19 @@ class RO3{
 		return $s;	
 	} # end: container_html()
 	
+
+	/**
+	 * Shortcode helpers
+	 *
+	 * - block_html()
+	 * - block_html_basic()
+	 * - block_html_bar()
+	 * - block_html_fa()
+	 * - header_html()
+	 * - description_html()
+	 * - fa_icon_html()
+	 * - pad_fa()
+	 */
 	# get HTML for block $i
 	public static function block_html($i){
 		# the string we'll return
@@ -238,10 +278,6 @@ class RO3{
 		return $s;
 	}
 	
-	/*
-	* Helper Functions
-	*/
-	
 	# return header HTML, with link if necessary
 	public static function header_html($block){
 		extract($block);		
@@ -287,6 +323,16 @@ class RO3{
 		return $str;
 	}
 	
+	/**
+	 * General helper functions
+	 * 
+	 * - req_file()
+	 * - clean_str_for_url()
+	 * - clean_str_for_field()
+	 * - get_field_array()
+	 * - get_choice_array()
+	 */
+
 	# require a file, checking first if it exists
 	static function req_file($path){ if(file_exists($path)) require_once $path; }
 	# return a permalink-friendly version of a string
@@ -390,5 +436,7 @@ class RO3{
 
 # require files for plugin
 foreach(RO3::$classes as $class){ RO3::req_file(ro3_dir("lib/class-{$class}.php")); }
+
+# load static variables for RO3 class
 RO3::$style = RO3_Options::$options['style'];
 RO3::$color = RO3_Options::$options['main_color'];
