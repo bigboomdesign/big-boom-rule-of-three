@@ -34,7 +34,7 @@ For best results, make sure the images you use for each content block have the s
 == Installation ==
 
 * Go To Plugins >> Add New
-* Either search for \"Big Boom\" or Upload the .zip file downloaded here.
+* Either search for "Big Boom" or Upload the .zip file downloaded here.
 * Once installed, go to the `Rule Of Three` admin menu item and set up your content
 * Use the shortcode [rule-of-three] in a page/post/widget/etc to insert the content into the front end
 
