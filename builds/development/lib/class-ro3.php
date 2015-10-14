@@ -47,10 +47,8 @@ class RO3{
 			wp_enqueue_style('ro3-admin-css', ro3_url('css/admin_comp.css'));
 			
 			# iris color picker
-			wp_enqueue_style("ro3-iris-css", ro3_url("/assets/iris/iris.min.css"));				
-			wp_enqueue_script( 'ro3-jquery-ui-js', ro3_url( '/assets/iris/jquery-ui.js'), array( 'jquery' ) );
-			wp_enqueue_script( 'ro3-iris-js', ro3_url( '/assets/iris/iris.min.js'), array( 'jquery', 'ro3-jquery-ui-js' ) );
-			
+			wp_enqueue_script( 'iris' );
+		
 			# font awesome
 			wp_enqueue_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css'));
 		}
