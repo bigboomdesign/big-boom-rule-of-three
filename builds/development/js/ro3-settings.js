@@ -90,7 +90,7 @@ jQuery(document).ready(function($){
 		$.post(
 			ajaxurl,
 			{
-				action: 'get_block_data_for_post',
+				action: 'ro3_get_block_data_for_post',
 				post_id: id,
 			},
 			function(data){

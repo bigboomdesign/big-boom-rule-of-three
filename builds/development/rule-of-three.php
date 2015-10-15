@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Big Boom Rule Of Three
  * Description: Uses shortcode to insert a responsive, custom-defined rule of 3 into a page or post
- * Version: 0.5.3
+ * Version: 0.5.4
  * Author: Big Boom Design
  * Author URI: http://bigboomdesign.com
  */
@@ -94,8 +94,8 @@ function ro3_get_posts_for_type(){
  * @param 	string 		$_POST['post_id'] 		The ID of the selected post
  * @since 	1.0.0
  */
-add_action('wp_ajax_get_block_data_for_post', 'get_block_data_for_post');
-function get_block_data_for_post(){
+add_action('wp_ajax_ro3_get_block_data_for_post', 'ro3_get_block_data_for_post');
+function ro3_get_block_data_for_post(){
 	$post = get_post($_POST['post_id']);
 	$out = array(
 		'post_title' => $post->post_title,
