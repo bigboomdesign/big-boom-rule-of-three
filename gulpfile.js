@@ -14,7 +14,7 @@ function panel(str){ return "components/"+str.toString();}
 
 env = process.env.NODE_ENV || "development";
 if(env==="development"){
-	outputDir = 'builds/development/';
+	outputDir = 'trunk';
 	sassStyle = "expanded";
 }
 else{ 
@@ -24,8 +24,8 @@ else{
 sassSources = [panel('/sass/comp.scss'), panel('/sass/admin_comp.scss')];
 
 // php and js read from development
-phpSources = ['builds/development/**/*.php'];
-jsSources = ['builds/development/js/*.js'];
+phpSources = ['trunk/**/*.php'];
+jsSources = ['trunk/js/*.js'];
 
 gulp.task("default", ['php', 'js', 'compass', 'watch']);
 gulp.task("php", function(){

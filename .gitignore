@@ -1,4 +1,8 @@
 .DS_Store
+.svn
+assets
+tags
+branches
 node_modules
 .tmp
 .sass-cache
