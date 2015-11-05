@@ -431,7 +431,11 @@ for($i = 1; $i <= $n; $i++){
 	} # end foreach: grouped options
 } # end for: $i < $n
 
-# main settings section
+/**
+ * Main settings section
+ */
+
+# Which style to use for the rule of three
 RO3_Options::$settings[] = array(
 	'name'=>'style', 'type'=>'radio', 'label' => 'Style', 'section' => 'main',
 	'choices' => array(
@@ -443,6 +447,20 @@ RO3_Options::$settings[] = array(
 		array('value' => 'fa-icon', 'label' => 'Font Awesome'),		
 	)
 );
+
+# Which hover state to use
+RO3_Options::$settings[] = array(
+	'name' => 'hover_effect',
+	'type' => 'select',
+	'choices' => array( 
+		array( 'value' => '', 'label' => 'None' ), 
+		array( 'value' => 'hvr-grow', 'label' => 'Grow' ), 
+		array( 'value' => 'hvr-float-shadow', 'label' => 'Float Shadow' ), 
+	),
+	'label' => 'Hover Effect',
+	'section' => 'main',
+);
+
 RO3_Options::$settings[] = array(
 	'name' => 'main_color', 'type' => 'text', 'class' => 'color-picker', 'label' => 'Main Color', 'section' => 'main'
 );

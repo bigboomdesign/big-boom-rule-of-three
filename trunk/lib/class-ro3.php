@@ -19,6 +19,14 @@ class RO3{
 	static $style;
 
 	/**
+	 * The allowed values for hover effect
+	 *
+	 * @param 	array
+	 * @since 	1.1.0
+	 */
+	static $hover_effects = array( 'hvr-grow', 'hvr-float-shadow' );
+
+	/**
 	 * @param 	string 	The hex color selected as the main front end color (shortuc for RO3_Options::$options['color'])
 	 */
 	static $color;
@@ -228,7 +236,15 @@ class RO3{
 		if($image){
 			# if link exists, wrap it around the image
 			if($link) $s .= "<a class='ro3-link " . ((RO3::$style == "none") ? "" : RO3::$style ) . "' href='{$link}'>";
-				$s .= "<img src='{$image}'/>";
+				
+				# open image tag
+				$s .= "<img src='{$image}' ";
+
+				# hover effect				
+				$s .= self::get_hover_class_attribute();
+			
+				# close image tag
+				$s .= "/>";
 			if($link) $s .= "</a>";
 		}
 		# header (with link if it's set)
@@ -254,7 +270,12 @@ class RO3{
 		if($image){
 			# if link exists, wrap it around the image
 			if($link) $s .= "<a class='ro3-link " . ((RO3::$style == "none") ? "" : RO3::$style ) . "' href='{$link}'>";
-				$s .= "<img src='{$image}'/>";
+				$s .= "<img src='{$image}' ";
+
+					#hover
+					$s .= self::get_hover_class_attribute();
+
+				$s .= " />";
 			if($link) $s .= "</a>";
 		}
 		# header (with link if it's set)
@@ -310,7 +331,12 @@ class RO3{
 		
 		$s = '';
 		if($link) $s .= '<a href="'. $link .'">';
-		$s .= '<i style="color: '. $color .'; font-size: '. $size .'" class="fa '. self::pad_fa($fa_icon) .'"></i>';
+		$s .= '<i ';
+			$s .= 'style="color: '. $color .'; font-size: '. $size .'" ';
+			$s .= 'class="fa '. self::pad_fa($fa_icon) . ' ';
+			$s .= self::get_hover_effect();
+			$s .= '"';
+		$s .= '></i>';
 		if($link) $s .= '</a>';
 		return $s;
 	}
@@ -324,6 +350,8 @@ class RO3{
 	/**
 	 * General helper functions
 	 * 
+	 * - get_hover_effect()
+	 * - get_hover_class_attribute()
 	 * - req_file()
 	 * - clean_str_for_url()
 	 * - clean_str_for_field()
@@ -331,6 +359,29 @@ class RO3{
 	 * - get_choice_array()
 	 */
 
+	/**
+	 * Check if hover effect exists and is valid and return either the value or an empty string
+	 *
+	 * @since 	1.1.0
+	 */
+	public static function get_hover_effect() {
+		
+		if( ! isset( RO3_Options::$options['hover_effect'] ) ) return '';
+		if( ! in_array( RO3_Options::$options['hover_effect'], self::$hover_effects ) ) return '';
+
+		return RO3_Options::$options['hover_effect'];
+	}
+
+	/**
+	 * Return the HTML class attribute text for the hover effect
+	 *
+	 * @since 	1.1.0
+	 */
+	public static function get_hover_class_attribute() {
+		if( empty( self::get_hover_effect() ) ) return '';
+		return ' class="' . self::get_hover_effect() . '" ';
+	}
+	
 	# require a file, checking first if it exists
 	static function req_file($path){ if(file_exists($path)) require_once $path; }
 	# return a permalink-friendly version of a string
