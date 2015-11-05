@@ -1,0 +1,32 @@
+#ro3-container{
+	padding-top: 1em;
+	img{ max-width: 100%; height: auto; }
+	h2{
+		padding: 0.5em 0;
+		margin: 0;
+	}
+	p.ro3-read-more{ margin-top: 1em; }
+	
+	@include container(100%);
+	overflow: visible !important;
+	.ro3-block{ 
+		@include breakpoint($med) { @include span(1 of 3); }
+		&:last-child{ margin-right: 0; }
+		.ro3-read-more{
+			text-align: right;
+		}
+	} // end: .ro3-block
+	@include clearfix;
+	
+	&.circle-container{
+		.ro3-block .ro3-read-more{ text-align: center; }
+	}
+	&.bar-container{
+		h2{
+			border-bottom: solid 0.8em;
+			padding-bottom: 0.5em;
+			margin-bottom: 0.5em;
+			display: block;
+		}
+	}
+} // #ro3-container
