@@ -382,8 +382,8 @@ class RO3{
 		$hover = self::get_hover_effect();
 
 		if( empty( $hover ) ) return '';
-		
-		return ' class="' . self::get_hover_effect() . '" ';
+
+		return ' class="' . $hover . '" ';
 	}
 
 	# require a file, checking first if it exists
