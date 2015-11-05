@@ -378,10 +378,14 @@ class RO3{
 	 * @since 	1.1.0
 	 */
 	public static function get_hover_class_attribute() {
-		if( empty( self::get_hover_effect() ) ) return '';
+		
+		$hover = self::get_hover_effect();
+
+		if( empty( $hover ) ) return '';
+		
 		return ' class="' . self::get_hover_effect() . '" ';
 	}
-	
+
 	# require a file, checking first if it exists
 	static function req_file($path){ if(file_exists($path)) require_once $path; }
 	# return a permalink-friendly version of a string
