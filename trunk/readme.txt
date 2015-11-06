@@ -27,6 +27,7 @@ Additional Features:
 * Easily add a title, image/icon, description, and link to each block of content for an instant call-to-action section
 * Load existing content using your pages, posts, or custom post types
 * Use a color picker utility to easily select a primary accent color to match your site
+* Includes an option to select a hover effect for the rule of three images or icons
 * Option to include "Read More" link with each block
 
 For best results, make sure the images you use for each content block have the same aspect ratio. 
@@ -55,4 +56,10 @@ None yet.
 
 == Changelog ==
 
-None yet.
+= 1.1.0 = 
+
+* Added option for hover effect
+
+= 1.0.0 = 
+
+* Initial Release
