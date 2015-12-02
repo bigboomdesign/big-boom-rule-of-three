@@ -1,4 +1,6 @@
-# WP Rule Of Three
+# Big Boom Rule Of Three
+
+WordPress plugin to help you easily build responsive blocks of content for your site
 
 Create your content blocks on the plugin settings page and then use shortcode `[rule-of-three]` to insert the content you create anywhere on your site.  The plugin provides several options as to how your blocks will be displayed on the front end:
 
@@ -16,6 +18,7 @@ Additional Features:
 * Easily add a title, image/icon, description, and link to each block of content for an instant call-to-action section
 * Load existing content using your pages, posts, or custom post types
 * Use a color picker utility to easily select a primary accent color to match your site
+* Includes an option to select a hover effect for the rule of three images or icons
 * Option to include "Read More" link with each block
 
 For best results, make sure the images you use for each content block have the same aspect ratio. 
