@@ -1,4 +1,5 @@
 #ro3-container{
+
 	padding-top: 1em;
 	img{ max-width: 100%; height: auto; }
 	h2{
@@ -9,13 +10,35 @@
 	
 	@include container(100%);
 	overflow: visible !important;
+
+	// for three blocks
+	&.three-blocks .ro3-block{
+		@include breakpoint($med) { 
+			@include span(1 of 3); 
+			&:last-child{ margin-right: 0; }
+		}
+	}
+
+	// for four blocks
+	&.four-blocks .ro3-block {
+		@include breakpoint($large) { 
+			@include span(1 of 4);
+			&:last-child{ margin-right: 0; }
+		}
+	}
+
 	.ro3-block{ 
-		@include breakpoint($med) { @include span(1 of 3); }
-		&:last-child{ margin-right: 0; }
+
+		max-width: 350px;
+		margin: auto;
+		margin-bottom: 2em;
+
 		.ro3-read-more{
 			text-align: right;
 		}
+
 	} // end: .ro3-block
+
 	@include clearfix;
 	
 	&.circle-container{

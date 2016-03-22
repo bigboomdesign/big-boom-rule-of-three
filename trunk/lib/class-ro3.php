@@ -134,16 +134,20 @@ class RO3{
 	 * @since 	1.0.0
 	 */
 	public static function container_html(){
+
 		extract(RO3_Options::$options);
+
+		if( empty( $num_blocks ) || ! in_array( $num_blocks, array( '3', '4' ) ) ) $num_blocks = '3';
+
 		# do nothing if we don't have at least 1 title set
 		if(empty($title1) && empty($title2) && empty($title3)) return;
-		
+
 		# number of columns we'll have
 		$n = 3;
 		# string to return
 		$s = '';
-		$s .= "<div id='ro3-container' class='" . $style . "-container'>";
-		for($i = 1; $i <= $n; $i++){
+		$s .= "<div id='ro3-container' class='" . $style . "-container " .  ( 4 == $num_blocks ? 'four' : 'three' ) . "-blocks'>";
+		for($i = 1; $i <= $num_blocks; $i++){
 			$s .= self::block_html($i);
 		}
 		$s .= "</div>"; // #ro3-container

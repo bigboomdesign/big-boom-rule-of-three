@@ -1,5 +1,9 @@
+// main "Rule of..." selector
+var $numBlocksSelect;
+
 // font awesome size input
 var $faSizeInput;
+
 // fa icon size table row
 var $faSizeTr;
 
@@ -9,10 +13,18 @@ var $faInputs;
 var $imgInputs;
 
 jQuery(document).ready(function($){
+
+	$numBlocksSelect = $('select#num_blocks');
 	$faSizeInput = $('#fa_icon_size');
 	$faSizeTr = $('#fa_icon_size').closest('tr');
 	$faInputs = $('input.fa_icon');
 	$imgInputs = $('input.image');
+
+	/* onclick for 'Rule Of...' (num_blocks) select */
+	$numBlocksSelect.on( 'change', function() {
+		toggleNumBlocks( this, $ );
+	} );
+	toggleNumBlocks( $numBlocksSelect[0], $ );
 	
 	/* onclick for 'Style' radio buttons */
 	$('input[name="ro3_options[style]"]').on('click', function(){
@@ -125,9 +137,25 @@ jQuery(document).ready(function($){
 	}); // end: onchange for post select dropdown
 }); // end: $(document).ready()
 
-/*
-* helper functions
-*/
+/**
+ * Helper functions
+ */
+
+/**
+ * Change the main 'Rule Of...' (num_blocks) setting
+ */
+function toggleNumBlocks( elem, $ ) {
+
+	$elem = $( elem );
+
+	var $blockFour = $( 'div.ro3-settings-block[data-block=4]' );
+
+	if( 4 == $elem.val() ) $blockFour.show();
+	else $blockFour.hide();
+
+
+} // end: toggleNumBlocks()
+
 // open or close the font awesome input
 function toggleStyle(elem, $){
 	// clear out all preview items
@@ -160,6 +188,7 @@ function toggleStyle(elem, $){
 		$imgInputs.closest('tr').css({display: 'table-row'});
 	}
 } // end: toggleStyle()
+
 // change the fa icon size based on input value
 function changeIconSize($){
 	var size = $('input#fa_icon_size').val();

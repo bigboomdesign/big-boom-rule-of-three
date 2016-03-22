@@ -328,7 +328,7 @@ class RO3_Options{
 		add_settings_section('ro3_main', '', 'ro3_main_section_text', 'ro3_settings');
 		
 		# set up section for each rule component
-		for($i = 1; $i <= 3; $i++){
+		for($i = 1; $i <= 4; $i++){
 			add_settings_section('ro3_'.$i, 'Block ' . $i, '', 'ro3_settings');
 		}
 		# add fields
@@ -340,15 +340,18 @@ class RO3_Options{
 		$pts = get_post_types($pt_args, 'objects');
 		# loop through settings and register
 		foreach(RO3_Options::$settings as $setting){
+
 			# add choices for custom post types
 			foreach($pts as $pt){
+
 				# make sure we have published posts for this post type
-				if(!get_posts(
+				if( ! get_posts(
 					array(
 						'post_type' => $pt->name, 'post_status' => 'publish'
 					)
-				)) continue;
-				if(strpos($setting['name'],'post_type') === 0){
+				) ) continue;
+
+				if( strpos($setting['name'],'post_type' ) === 0 ) {
 					$setting['choices'][] = array(
 						'label' => $pt->labels->name, 
 						'value' => $pt->name,
@@ -357,16 +360,54 @@ class RO3_Options{
 				}
 			}
 			add_settings_field($setting['name'], $setting['label'], 'ro3_settings_field_callback', 'ro3_settings', 'ro3_'.$setting['section'], $setting);
-		}	
-	}
+		
+		} # end foreach: plugin settings
+	
+	} # end: register_settings()
+
 	# Do settings page
 	public static function settings_page(){
 		?><div>
 			<h2>Rule of Three Settings</h2>
 			<form action="options.php" method="post">
-			<?php settings_fields('ro3_options'); ?>
-			<?php do_settings_sections('ro3_settings'); ?>
-			<?php submit_button(); ?>
+			<?php 
+				settings_fields('ro3_options');
+
+				/**
+				 * Main Section
+				 */
+				ro3_main_section_text();
+				?>
+				<table class='form-table'>
+				<?php
+
+					do_settings_fields('ro3_settings', 'ro3_main');
+				?>
+				</table>
+				<?php
+
+				/**
+				 * Block content sections
+				 */
+				$n = 4;
+				foreach( range( 1, $n ) as $i ) {
+
+					?>
+					<div class='ro3-settings-block' data-block='<?php echo $i; ?>'>
+						<hr />
+						<h2>Block <?php echo $i; ?></h2>
+						<table class='form-table'>
+						<?php
+
+							do_settings_fields('ro3_settings', 'ro3_' . $i );
+						?>
+						</table>
+					</div>
+					<?php
+				}
+
+				submit_button(); 
+			?>
 			</form>
 		</div><?php
 	}
@@ -383,8 +424,8 @@ class RO3_Options{
  * Set up backend available settings
  */
 
-# settings that will come in 3's (one for each block)
-$n = 3;
+# settings that will come in 4's (one for each potential block)
+$n = 4;
 $options = array(
 	array('name' => 'post_type', 'type' => 'radio', 'label' => 'Use Existing Content',
 		'class' => 'ro3-post-type-select',
@@ -435,6 +476,16 @@ for($i = 1; $i <= $n; $i++){
  * Main settings section
  */
 
+# Whether to use rule of three or rule of four
+RO3_Options::$settings[] = array(
+	'name' => 'num_blocks', 'type' => 'select', 'label' => 'Rule Of ...',
+	'section' => 'main',
+	'choices' => array(
+		array( 'value' => '3', 'label' => 'Three' ),
+		array( 'value' => '4', 'label' => 'Four' ),
+	)
+);
+
 # Which style to use for the rule of three
 RO3_Options::$settings[] = array(
 	'name'=>'style', 'type'=>'radio', 'label' => 'Style', 'section' => 'main',
@@ -481,6 +532,13 @@ RO3_Options::$settings[] = array(
 
 RO3_Options::$options = get_option('ro3_options');
 
+# make sure each setting has a key in the main options (even if empty)
+if( ! empty( RO3_Options::$options ) ) foreach( RO3_Options::$settings as $setting ) {
+	if( empty( RO3_Options::$options[ $setting['name'] ] ) ) {
+		RO3_Options::$options[ $setting['name'] ] = '';
+	}
+}
+
 # if no options have been saved yet, make sure at least all keys are present in CPTD_Options::$options
 if(!RO3_Options::$options){
 
@@ -493,6 +551,7 @@ if(!RO3_Options::$options){
 }
 
 # set the defaults that we want to implement
-if(!RO3_Options::$options['style']) RO3_Options::$options['style'] = 'none';
-if(!RO3_Options::$options['main_color']) RO3_Options::$options['main_color'] = '#333';
-if(!RO3_Options::$options['fa_icon_size']) RO3_Options::$options['fa_icon_size'] = '2em';
+if( ! RO3_Options::$options['num_blocks'] ) RO3_Options::$options['num_blocks'] = '3';
+if( ! RO3_Options::$options['style'] ) RO3_Options::$options['style'] = 'none';
+if( ! RO3_Options::$options['main_color'] ) RO3_Options::$options['main_color'] = '#333';
+if( ! RO3_Options::$options['fa_icon_size'] ) RO3_Options::$options['fa_icon_size'] = '2em';

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Big Boom Rule Of Three
  * Description: Uses shortcode to insert a responsive, custom-defined rule of 3 into a page or post
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Big Boom Design
  * Author URI: http://bigboomdesign.com
  */
@@ -34,13 +34,16 @@ if(is_admin() && !(defined('DOING_AJAX') && DOING_AJAX)){
 	}
 	## do field display
 	function ro3_settings_field_callback($setting){ RO3_Options::do_settings_field($setting); }
+
 	## validate fields when saved
 	function ro3_options_validate($input) { return $input; }
+
 	## plugin options page
 	add_action('admin_menu', 'ro3_settings_page');
 	function ro3_settings_page() {
 		add_menu_page('Rule of Three Settings', 'Rule of Three', 'manage_options', 'ro3_settings', 'ro3_do_settings_page');
 	}
+
 	function ro3_do_settings_page(){ RO3_Options::settings_page(); }
 
 } #end: admin routines
