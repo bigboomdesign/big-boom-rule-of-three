@@ -1,8 +1,11 @@
 <?php
 /**
  * Handles the display, saving, and init/retrieval of options for the plugin
+ * Generates HTML for the main plugin settings page
  *
  * Static variables are set after class definition below
+ *
+ * @since 	1.0.0
  */
 class RO3_Options{
 
@@ -24,6 +27,8 @@ class RO3_Options{
 	 * Default values:
 	 *
 	 * @type array 	$options{
+	 *
+	 *		@type string 	$num_blocks		The number of blocks to use (3 or 4) (Default: '3')
 	 * 		@type string  	$style 			The display style for the plugin (Default: 'none')
 	 * 		@type string 	$main_color		A valid CSS color to use as the main color on the front end (Default: '#333')
 	 * 		@type string 	$fa_icon_size 	A valid CSS font size for the Font Awesome Icon, if used (Default: '2em')
@@ -31,6 +36,19 @@ class RO3_Options{
 	 */
 	static $options = array();
 	
+	/**
+	 * Class methods
+	 *
+	 * 		- do_settings_field()
+	 * 		- text_field()
+	 * 		- textarea_field()
+	 * 		- checkbox_field()
+	 *		- select_field()
+	 * 		- radio_field()
+	 * 		- image_field()
+	 * 		- register_settings()
+	 * 		- settings_page()
+	 */
 	
 	/**
 	 * Display a plugin settings form element
@@ -46,7 +64,9 @@ class RO3_Options{
 	 *		@type 	string 			$type 		Optional. The type of form element to display (text|textarea|checkbox|select|single-image|radio) (Default: 'text')
 	 * 		@type 	string 			$value 		Optional. The value of the HTML `value` attribute
 	 * 		@type 	array|string 	$choices 	Optional. The choices for the form element (for select, radio, checkbox)
-	 * } 
+	 * }
+	 *
+	 * @since 	1.0.0
 	 */
 	public static function do_settings_field($setting){
 
@@ -149,9 +169,12 @@ class RO3_Options{
 						<?php
 						}
 					}
-				} # end: choice has children
-			} # end: foreach: choices
-		} # end: setting has choices
+				} # end if: choice has children
+
+			} # end foreach: choices
+
+		} # end if: setting has choices
+
 	} # end: do_settings_field()
 
 	/**
@@ -159,8 +182,9 @@ class RO3_Options{
 	 *
 	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
 	 * @return 	null
+	 * @since 	1.0.0
 	 */
-	public static function text_field($setting){
+	public static function text_field( $setting ) {
 		extract($setting);
 		?><input 
 			id="<?php echo $name; ?>" 
@@ -174,8 +198,10 @@ class RO3_Options{
 
 	/**
 	 * Display a textarea element
+	 *
 	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
 	 * @return 	null
+	 * @since 	1.0.0
 	 */
 	public static function textarea_field($setting){
 		extract($setting);
@@ -186,8 +212,10 @@ class RO3_Options{
 
 	/**
 	 * Display one or more checkboxes
+	 *
 	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
 	 * @return 	null
+	 * @since 	1.0.0
 	 */
 	public static function checkbox_field($setting){
 		extract($setting);
@@ -204,12 +232,15 @@ class RO3_Options{
 		</label>
 		<?php
 		}
-	}
+	
+	} # end: checkbox_field()
 
 	/**
 	 * Display a <select> dropdown element
+	 *
 	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
 	 * @return 	null
+	 * @since 	1.0.0
 	 */
 	public static function select_field($setting){
 		extract($setting);
@@ -259,12 +290,15 @@ class RO3_Options{
 			?>
 			
 		</select><?php
-	}
+	
+	} # end: select_field()
 
 	/**
 	 * Display a group of radio buttons
+	 *
 	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
 	 * @return 	null
+	 * @since 	1.0.0
 	 */
 	public static function radio_field($setting){
 		extract($setting);
@@ -290,12 +324,15 @@ class RO3_Options{
 			/>&nbsp;<?php echo $label; ?></label>&nbsp;&nbsp;
 			<?php
 		}
-	}
+
+	} # end: radio_field()
 
 	/**
 	 * Display an image upload element that uses the WP Media browser
+	 *
 	 * @param 	array 	$setting 	See `do_settings_field()`. Has been filtered through `RO3::get_field_array()`
 	 * @return 	null
+	 * @since 	1.0.0
 	 */
 	public static function image_field($setting){
 		# this will set $name for the field
@@ -318,31 +355,53 @@ class RO3_Options{
 			<?php if($value){ ?><img src="<?php echo $value; ?>" /><?php } ?>
 		</div>
 		<?php
-	}
+
+	} # end: image_field()
 
 	/**
-	 * Register settings
+	 * Validate plugin settings fields when saved
+	 *
+	 * @param 	array 	$input 		The array of options being saved
+	 * @since 	1.0.0
+	 */
+	public static function options_validate( $input ) { return $input; }
+
+
+	/**
+	 * Register settings and sections for the main plugin settings with the WP Settings API
+	 *
+	 * @since 	1.0.0
 	 */
 	public static function register_settings(){
-		register_setting( 'ro3_options', 'ro3_options', 'ro3_options_validate' );
-		add_settings_section('ro3_main', '', 'ro3_main_section_text', 'ro3_settings');
+
+		# register the main option group for the plugin
+		register_setting( 'ro3_options', 'ro3_options', array( 'RO3_Options', 'options_validate' ) );
+
+		# register the main plugin options sections
+		add_settings_section('ro3_main', '', array( 'RO3_Options', 'main_section_text' ), 'ro3_settings');
 		
-		# set up section for each rule component
-		for($i = 1; $i <= 4; $i++){
+		# set up a section for each block
+		$n = 4;
+		for( $i = 1; $i <= $n; $i++ ) {
 			add_settings_section('ro3_'.$i, 'Block ' . $i, '', 'ro3_settings');
 		}
-		# add fields
-		## get choices for custom post types
+
+		/**
+		 * Register settings fields
+		 */
+
+		# get choices for custom post types
 		$pt_args = array(
 			'_builtin' => false,
 			'public' => true
 		);
-		$pts = get_post_types($pt_args, 'objects');
+		$pts = get_post_types( $pt_args, 'objects' );
+
 		# loop through settings and register
-		foreach(RO3_Options::$settings as $setting){
+		foreach( RO3_Options::$settings as $setting ) {
 
 			# add choices for custom post types
-			foreach($pts as $pt){
+			foreach( $pts as $pt ) {
 
 				# make sure we have published posts for this post type
 				if( ! get_posts(
@@ -351,21 +410,29 @@ class RO3_Options{
 					)
 				) ) continue;
 
-				if( strpos($setting['name'],'post_type' ) === 0 ) {
+				# set the post type choices if this setting calls for it
+				if( strpos( $setting['name'], 'post_type' ) === 0 ) {
 					$setting['choices'][] = array(
 						'label' => $pt->labels->name, 
 						'value' => $pt->name,
 						'data' => array('section' => $setting['section'])
 					);
 				}
-			}
-			add_settings_field($setting['name'], $setting['label'], 'ro3_settings_field_callback', 'ro3_settings', 'ro3_'.$setting['section'], $setting);
+
+			} # end foreach: post types
+
+			# register the settings field with the WP Settings API
+			add_settings_field($setting['name'], $setting['label'], array( 'RO3_Options', 'do_settings_field' ), 'ro3_settings', 'ro3_' . $setting['section'], $setting);
 		
 		} # end foreach: plugin settings
 	
 	} # end: register_settings()
 
-	# Do settings page
+	/**
+	 * Render HTML for the main plugin settings page
+	 *
+	 * @since 	1.0.0
+	 */
 	public static function settings_page(){
 		?><div>
 			<h2>Rule of Three Settings</h2>
@@ -376,7 +443,7 @@ class RO3_Options{
 				/**
 				 * Main Section
 				 */
-				ro3_main_section_text();
+				self::main_section_text();
 				?>
 				<table class='form-table'>
 				<?php
@@ -410,7 +477,21 @@ class RO3_Options{
 			?>
 			</form>
 		</div><?php
+
+	} # end: settings_page()
+
+	/**
+	 * The main plugin settings description
+	 *
+	 * @since 	1.0.0
+	 */
+	public static function main_section_text(){
+	?>
+		<p>Define the blocks here that will show up when you use this shortcode:</p>
+		<p><kbd>[rule-of-three]</kbd></p>
+	<?php
 	}
+
 } # end class: RO3_Options
 
 /**
@@ -446,7 +527,7 @@ $options = array(
 	array('name' => 'link', 'type' => 'text', 'label' => 'Link')
 );
 
-# feed the above settings into RO3_Options::$settings in 3's
+# feed the above settings into RO3_Options::$settings in 4's
 RO3_Options::$settings = array();
 for($i = 1; $i <= $n; $i++){
 
@@ -470,10 +551,11 @@ for($i = 1; $i <= $n; $i++){
 		RO3_Options::$settings[] = $option;
 
 	} # end foreach: grouped options
+
 } # end for: $i < $n
 
 /**
- * Main settings section
+ * Load settings for the main settings section (i.e. the settings that don't come in 4's)
  */
 
 # Whether to use rule of three or rule of four

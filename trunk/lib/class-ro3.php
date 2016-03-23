@@ -41,16 +41,20 @@ class RO3{
 
 	/**
 	 * Enqueue styles and scripts for /wp-admin
+	 *
+	 * @since 	1.0.0
 	 */
-
 	public static function admin_enqueue(){
+
 		# make sure we only load our scripts on the ro3_settings page
 		$screen = get_current_screen();
 		if($screen->id == "toplevel_page_ro3_settings"){
+
 			# js
 			wp_enqueue_media();	
 			wp_enqueue_script("media-single-js", ro3_url('js/media-single.js'), array('media-views', 'jquery'));
 			wp_enqueue_script("ro3-settings-js", ro3_url('js/ro3-settings.js'), array('jquery'));
+
 			# css
 			wp_enqueue_style('ro3-admin-css', ro3_url('css/admin_comp.css'));
 			
@@ -60,6 +64,7 @@ class RO3{
 			# font awesome
 			wp_enqueue_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css'));
 		}
+
 	} # end: admin_enqueue()
 
 	/**
@@ -67,6 +72,7 @@ class RO3{
 	 *
 	 * @param 	string 	$post_type 		The post type for which we're displaying posts
 	 * @return 	null
+	 * @since 	1.0.0
 	 */
 
 	public static function select_post_for_type($post_type, $section = ''){
@@ -112,14 +118,22 @@ class RO3{
 	 */
 
 	/**
-	 * Callback for 'wp_enqueue_scripts'
+	 * Callback for 'wp_enqueue_scripts' (fires on the front end only)
+	 *
+	 * Note that we are only registering our styles/scripts here so that they don't load on every single page
+	 * load across the site.  When the shortcode is called on a particular page, then we go ahead and enqueue
+	 * the necessary scripts for that page view.
+	 *
 	 * @since 	1.0.0
 	 */
 	public static function enqueue(){
-		wp_enqueue_style('ro3-css', ro3_url('/css/comp.css'));
-		wp_enqueue_script('ro3-js', ro3_url('/js/rule-of-three.js'), array('jquery'));
+
+		wp_register_style('ro3-css', ro3_url('/css/comp.css'));
+		wp_register_script('ro3-js', ro3_url('/js/rule-of-three.js'), array('jquery'));
+
 		# font awesome
-		wp_enqueue_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css'));			
+		wp_register_style('ro3-fa', ro3_url('/assets/font-awesome/css/font-awesome.min.css') );
+
 	} # end: enqueue()
 
 
@@ -151,7 +165,17 @@ class RO3{
 			$s .= self::block_html($i);
 		}
 		$s .= "</div>"; // #ro3-container
-		return $s;	
+
+		# enqueue styles and scripts for the content blocks
+		wp_enqueue_style( 'ro3-css' );
+		wp_enqueue_script( 'ro3-js' );
+
+		if( 'fa-icon' == RO3_Options::$options['style'] ) {
+			wp_enqueue_style( 'ro3-fa' );
+		}
+
+		return $s;
+		
 	} # end: container_html()
 	
 

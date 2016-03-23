@@ -1,6 +1,6 @@
 === Big Boom Rule Of Three ===
 Contributors: bigboomdesign, michaelhull
-Tags: responsive, layout builder, call to action, rule of three
+Tags: responsive, layout builder, columns, blocks, call to action, rule of three, rule of four
 Requires at least: 4.0
 Tested up to: 4.4
 Stable tag: 1.2.0
@@ -29,6 +29,7 @@ Additional Features:
 * Use a color picker utility to easily select a primary accent color to match your site
 * Includes an option to select a hover effect for the rule of three images or icons
 * Option to include "Read More" link with each block
+* Despite the name, you can also create a group of four content blocks instead of three
 
 For best results, make sure the images you use for each content block have the same aspect ratio. 
 

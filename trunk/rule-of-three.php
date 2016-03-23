@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: Big Boom Rule Of Three
- * Description: Uses shortcode to insert a responsive, custom-defined rule of 3 into a page or post
- * Version: 1.2.0
+ * Description: Uses shortcode to insert a responsive, custom-defined rule of 3 (or 4) into a page or post
+ * Version: 1.2.1
  * Author: Big Boom Design
- * Author URI: http://bigboomdesign.com
+ * Author URI: https://bigboomdesign.com
  */
 
 /**
@@ -16,29 +16,15 @@ require_once ro3_dir("lib/class-ro3.php");
  * Admin routine
  */
 
-if(is_admin() && !(defined('DOING_AJAX') && DOING_AJAX)){
+if( is_admin() && !( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 	
 	# Scripts and styles
 	add_action("admin_enqueue_scripts", array('RO3', 'admin_enqueue'));
 
 	# define sections and fields for options page
-	add_action('admin_init', 'ro3_init');
-	function ro3_init(){ RO3_Options::register_settings(); }
-	
-	## plugin settings description
-	function ro3_main_section_text(){
-	?>
-		<p>Define the blocks here that will show up when you use this shortcode:</p>
-		<p><kbd>[rule-of-three]</kbd></p>
-	<?php
-	}
-	## do field display
-	function ro3_settings_field_callback($setting){ RO3_Options::do_settings_field($setting); }
+	add_action( 'admin_init', array( 'RO3_Options', 'register_settings' ) );
 
-	## validate fields when saved
-	function ro3_options_validate($input) { return $input; }
-
-	## plugin options page
+	# add main plugin options page to the WP Admin menu
 	add_action('admin_menu', 'ro3_settings_page');
 	function ro3_settings_page() {
 		add_menu_page('Rule of Three Settings', 'Rule of Three', 'manage_options', 'ro3_settings', 'ro3_do_settings_page');
@@ -123,7 +109,7 @@ function ro3_get_block_data_for_post(){
  * Return the URL (ro3_url) or folder path (ro3_dir) for this plugin
  * 
  * @param 	string 	$s 	Optional string to append to the path
- * @since 	2.0.0
+ * @since 	1.0.0
  */
-function ro3_url($s){ return plugins_url($s, __FILE__); }
-function ro3_dir($s){ return plugin_dir_path(__FILE__) . $s; }
+function ro3_url( $s ) { return plugins_url($s, __FILE__ ); }
+function ro3_dir( $s ) { return plugin_dir_path( __FILE__ ) . $s; }
