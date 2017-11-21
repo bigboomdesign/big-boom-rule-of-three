@@ -2,7 +2,7 @@
 Contributors: bigboomdesign, michaelhull
 Tags: responsive, layout builder, columns, blocks, call to action, rule of three, rule of four
 Requires at least: 4.0
-Tested up to: 4.7
+Tested up to: 4.9
 Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,7 +31,7 @@ Additional Features:
 * Option to include "Read More" link with each block
 * Despite the name, you can also create a group of four content blocks instead of three
 
-For best results, make sure the images you use for each content block have the same aspect ratio. 
+For best results, make sure the images you use for each content block have the same aspect ratio.
 
 
 == Installation ==
@@ -57,14 +57,14 @@ None yet.
 
 == Changelog ==
 
-= 1.2.0 = 
+= 1.2.0 =
 
 * Added option for Rule Of Four
 
-= 1.1.0 = 
+= 1.1.0 =
 
 * Added option for hover effect
 
-= 1.0.0 = 
+= 1.0.0 =
 
 * Initial Release
